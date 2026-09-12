@@ -100,7 +100,7 @@ function userBashInput(state: UserBashStates): UserBashInput {
 }
 
 const userBashKind = defineTaskKind<UserBashStates>()({
-  kind: 'pi.user_bash',
+  kind: 'tangent.user_bash',
   initialStatus: 'planned',
   roles: { planned: 'start', running: 'inflight', done: 'terminal', killed: 'terminal', lost: 'terminal' },
   preview: { init: async scratch => (await scratch.value(output).get()) ?? emptyOutput() },
@@ -170,7 +170,7 @@ Mapping from `packages/coding-agent/src/modes/interactive/interactive-mode.ts` (
 | `thinking_level_changed` | `value`, `addr === generationKind.config.thinking` |
 | `session_info_changed` | session watch `value` |
 | `entry_appended(custom)` | `entry` of a plugin or unregistered kind |
-| `bash_execution_update` | `task_output` on a `pi.user_bash` task (2.2) |
+| `bash_execution_update` | `task_output` on a `tangent.user_bash` task (2.2) |
 
 One map more than today: tool task id → call id, because tool components are created while the
 assistant message streams (by call id) and only later associated with their task.

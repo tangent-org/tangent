@@ -1,4 +1,4 @@
-# `@earendil-works/pi-example-plugin`
+# `@tangent-ai/tangent-example-plugin`
 
 This package provides conventional `session` and `tui` Chord facets. The Session-worker facet provides a remote greeting service. The TUI facet contributes `/hello` and calls that service.
 
@@ -7,14 +7,14 @@ The package needs no build script. Pi asks Chord to discover `src/session.ts` an
 From the repository root:
 
 ```bash
-PI_EXPERIMENTAL=1 ./pi-test.sh server \
+TANGENT_EXPERIMENTAL=1 ./pi-test.sh server \
   -e "$PWD/packages/coding-agent/examples/plugins/pi-example-plugin"
 ```
 
 Alternatively, a client can select the plugin for the Session it creates or resumes on one local server:
 
 ```bash
-PI_EXPERIMENTAL=1 ./pi-test.sh client \
+TANGENT_EXPERIMENTAL=1 ./pi-test.sh client \
   -e "$PWD/packages/coding-agent/examples/plugins/pi-example-plugin"
 ```
 

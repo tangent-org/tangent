@@ -7,7 +7,7 @@ import {
 	createAssistantMessageEventStream,
 	type Model,
 	type SimpleStreamOptions,
-} from "@earendil-works/pi-ai";
+} from "@tangent-ai/tangent-ai";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AuthStorage } from "../src/core/auth-storage.ts";
 import { createAgentSession } from "../src/core/sdk.ts";
@@ -175,8 +175,8 @@ describe("createAgentSession stream options", () => {
 			"openai-completions",
 			{},
 			{ headers: { "x-explicit": "explicit" } },
-			`export default function (pi) {
-				pi.on("before_provider_headers", (event) => {
+			`export default function (tangent) {
+				tangent.on("before_provider_headers", (event) => {
 					event.headers["x-hook"] = [
 						event.headers["x-provider"],
 						event.headers["x-model"],

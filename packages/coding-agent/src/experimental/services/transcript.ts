@@ -1,5 +1,5 @@
 import { defineService, type ReplicatedState } from "@earendil-works/chord";
-import type { LaneTranscriptSnapshot, LaneWatchEvent } from "@earendil-works/pi-agent-core";
+import type { LaneTranscriptSnapshot, LaneWatchEvent } from "@tangent-ai/tangent-agent-core";
 
 export interface TranscriptState {
 	snapshot: LaneTranscriptSnapshot | null;
@@ -12,4 +12,4 @@ export interface Transcript {
 	readonly state: ReplicatedState<TranscriptState>;
 }
 
-export const Transcript = defineService<Transcript>("pi.transcript");
+export const Transcript = defineService<Transcript>("tangent.transcript");

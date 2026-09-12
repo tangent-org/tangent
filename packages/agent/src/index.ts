@@ -1,4 +1,4 @@
-export { uuidv7 } from "@earendil-works/pi-ai";
+export { uuidv7 } from "@tangent-ai/tangent-ai";
 export type {
 	AttributeValue,
 	ExactTelemetryAttributes,
@@ -31,13 +31,13 @@ export type {
 	TelemetrySpanDefinition,
 	TelemetryStartAttributeDefinition,
 	TypedSpanStarter,
-} from "@earendil-works/pi-telemetry";
+} from "@tangent-ai/tangent-telemetry";
 export {
 	createTypedSpanStarter,
 	defineTelemetrySchema,
 	InMemoryTelemetryContext,
 	NOOP_TELEMETRY_CONTEXT,
-} from "@earendil-works/pi-telemetry";
+} from "@tangent-ai/tangent-telemetry";
 export * from "./agent.ts";
 export * from "./agent-loop.ts";
 export * from "./harness/agent-harness.ts";

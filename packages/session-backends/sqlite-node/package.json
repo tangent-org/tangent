@@ -1,7 +1,7 @@
 {
-	"name": "@earendil-works/pi-session-backend-sqlite-node",
+	"name": "@tangent-ai/tangent-session-backend-sqlite-node",
 	"version": "0.85.1",
-	"description": "Node sqlite session backend for @earendil-works/pi-agent-core sessions",
+	"description": "Node sqlite session backend for @tangent-ai/tangent-agent-core sessions",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -28,15 +28,15 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/earendil-works/pi.git",
+		"url": "git+https://github.com/earendil-works/tangent.git",
 		"directory": "packages/session-backends/sqlite-node"
 	},
 	"engines": {
 		"node": ">=22.19.0"
 	},
 	"dependencies": {
-		"@earendil-works/pi-ai": "^0.85.1",
-		"@earendil-works/pi-agent-core": "^0.85.1"
+		"@tangent-ai/tangent-ai": "^0.85.1",
+		"@tangent-ai/tangent-agent-core": "^0.85.1"
 	},
 	"devDependencies": {
 		"@vitest/coverage-v8": "4.1.9",

@@ -1,4 +1,4 @@
-import type { TelemetryContext } from "@earendil-works/pi-telemetry";
+import type { TelemetryContext } from "@tangent-ai/tangent-telemetry";
 import type { AnthropicOptions } from "./api/anthropic-messages.ts";
 import type { AzureOpenAIResponsesOptions } from "./api/azure-openai-responses.ts";
 import type { BedrockOptions } from "./api/bedrock-converse-stream.ts";
@@ -186,7 +186,7 @@ export interface StreamOptions extends ProviderRequestOptions<Model<Api>> {
 	/**
 	 * Arbitrary sampling parameters merged into the request body as-is, after the named request
 	 * fields, so keys here override them. Lets custom OpenAI-compatible servers (llama.cpp, vLLM,
-	 * SGLang, ...) receive parameters pi does not model, e.g. `top_p`, `top_k`, `min_p`,
+	 * SGLang, ...) receive parameters tangent does not model, e.g. `top_p`, `top_k`, `min_p`,
 	 * `repetition_penalty`. Merged over `Model.samplingParams` per key. Only applied by
 	 * OpenAI-compatible adapters (completions, responses, Azure responses); other APIs ignore it.
 	 */
@@ -574,7 +574,7 @@ export interface OpenAICompletionsCompat {
 	supportsReasoningEffort?: boolean;
 	/** Whether the provider supports `stream_options: { include_usage: true }` for token usage in streaming responses. Default: true. */
 	supportsUsageInStreaming?: boolean;
-	/** Whether streamed responses include `finish_reason`. When false, pi infers `stop` or `toolUse` when the stream ends. Default: true. */
+	/** Whether streamed responses include `finish_reason`. When false, tangent infers `stop` or `toolUse` when the stream ends. Default: true. */
 	supportsFinishReason?: boolean;
 	/** Which field to use for max tokens. Default: auto-detected from URL. */
 	maxTokensField?: "max_completion_tokens" | "max_tokens";
@@ -850,7 +850,7 @@ export interface Model<TApi extends Api> {
 	baseUrl: string;
 	reasoning: boolean;
 	/**
-	 * Maps pi thinking levels to provider/model-specific values.
+	 * Maps tangent thinking levels to provider/model-specific values.
 	 * Missing keys use provider defaults. null marks a level as unsupported.
 	 */
 	thinkingLevelMap?: ThinkingLevelMap;

@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { performance } from "node:perf_hooks";
-import { contentText } from "@earendil-works/pi-ai";
+import { contentText } from "@tangent-ai/tangent-ai";
 import {
 	type AgentSession,
 	type CreateAgentSessionOptions,
@@ -13,7 +13,7 @@ import {
 	ModelRuntime,
 	SessionManager,
 	SettingsManager,
-} from "@earendil-works/pi-coding-agent";
+} from "@tangent-ai/tangent-coding-agent";
 import {
 	createHarness,
 	type Harness,
@@ -26,23 +26,23 @@ import {
 } from "vitest-evals/harness";
 import { PI_SESSION_SNAPSHOT_ARTIFACT } from "./vitest-evals/artifacts.ts";
 
-export type PiCodingAgentInput = string | Array<{ type: "prompt"; content: string } | { type: "reload" }>;
+export type TangentCodingAgentInput = string | Array<{ type: "prompt"; content: string } | { type: "reload" }>;
 
-type PiCodingAgentModelSelection = {
+type TangentCodingAgentModelSelection = {
 	provider: string;
 	id: string;
 };
 
-type PiCodingAgentHarnessOptions = {
+type TangentCodingAgentHarnessOptions = {
 	name?: string;
-	model?: PiCodingAgentModelSelection;
+	model?: TangentCodingAgentModelSelection;
 	noTools?: CreateAgentSessionOptions["noTools"];
 	tools?: CreateAgentSessionOptions["tools"];
 	customTools?: CreateAgentSessionOptions["customTools"];
 	transformSystemPrompt?: (defaultPrompt: string) => string;
 };
 
-type PiCodingAgentHarnessWithOutput<TOutput extends JsonValue> = PiCodingAgentHarnessOptions & {
+type TangentCodingAgentHarnessWithOutput<TOutput extends JsonValue> = TangentCodingAgentHarnessOptions & {
 	output: (args: {
 		response: string;
 		session: AgentSession;
@@ -63,9 +63,9 @@ export function excludePiDocumentation(defaultPrompt: string): string {
 }
 
 export function resolveModelSelection(
-	explicitModel: PiCodingAgentModelSelection | undefined,
+	explicitModel: TangentCodingAgentModelSelection | undefined,
 	environment: { PI_PROVIDER?: string; PI_MODEL?: string } = process.env,
-): PiCodingAgentModelSelection {
+): TangentCodingAgentModelSelection {
 	const provider = (explicitModel?.provider ?? environment.PI_PROVIDER)?.trim();
 	const id = (explicitModel?.id ?? environment.PI_MODEL)?.trim();
 	if (!provider || !id) {
@@ -125,11 +125,11 @@ async function promptAgent(session: AgentSession, input: string, signal: AbortSi
 	return output ?? "";
 }
 
-async function runPiCodingAgent<TOutput extends JsonValue>(
-	input: PiCodingAgentInput,
+async function runTangentCodingAgent<TOutput extends JsonValue>(
+	input: TangentCodingAgentInput,
 	signal: AbortSignal | undefined,
 	setArtifact: HarnessContext["setArtifact"],
-	options: PiCodingAgentHarnessOptions | PiCodingAgentHarnessWithOutput<TOutput>,
+	options: TangentCodingAgentHarnessOptions | TangentCodingAgentHarnessWithOutput<TOutput>,
 ): Promise<SimpleHarnessResult<string | TOutput>> {
 	const startedAt = performance.now();
 	signal?.throwIfAborted();
@@ -141,7 +141,7 @@ async function runPiCodingAgent<TOutput extends JsonValue>(
 	const root = await mkdtemp(join(tmpdir(), "pi-eval-"));
 	const cwd = join(root, "workspace");
 	const isolatedHome = join(root, "home");
-	const agentDir = join(isolatedHome, ".pi", "agent");
+	const agentDir = join(isolatedHome, ".tangent", "agent");
 	const transformSystemPrompt = options.transformSystemPrompt;
 	let evaluatedSystemPrompt: string | undefined;
 	const extensionFactories: InlineExtension[] = [];
@@ -149,8 +149,8 @@ async function runPiCodingAgent<TOutput extends JsonValue>(
 		extensionFactories.push({
 			name: "eval-system-prompt-transform",
 			hidden: true,
-			factory: (pi) => {
-				pi.on("before_agent_start", (event) => {
+			factory: (tangent) => {
+				tangent.on("before_agent_start", (event) => {
 					evaluatedSystemPrompt = transformSystemPrompt(event.systemPrompt);
 					return { systemPrompt: evaluatedSystemPrompt };
 				});
@@ -288,15 +288,15 @@ async function runPiCodingAgent<TOutput extends JsonValue>(
 	};
 }
 
-export function createPiCodingAgentHarness<TOutput extends JsonValue>(
-	options: PiCodingAgentHarnessWithOutput<TOutput>,
-): Harness<PiCodingAgentInput, TOutput>;
-export function createPiCodingAgentHarness(options?: PiCodingAgentHarnessOptions): Harness<PiCodingAgentInput, string>;
-export function createPiCodingAgentHarness<TOutput extends JsonValue>(
-	options: PiCodingAgentHarnessOptions | PiCodingAgentHarnessWithOutput<TOutput> = {},
+export function createTangentCodingAgentHarness<TOutput extends JsonValue>(
+	options: TangentCodingAgentHarnessWithOutput<TOutput>,
+): Harness<TangentCodingAgentInput, TOutput>;
+export function createTangentCodingAgentHarness(options?: TangentCodingAgentHarnessOptions): Harness<TangentCodingAgentInput, string>;
+export function createTangentCodingAgentHarness<TOutput extends JsonValue>(
+	options: TangentCodingAgentHarnessOptions | TangentCodingAgentHarnessWithOutput<TOutput> = {},
 ) {
-	return createHarness<PiCodingAgentInput, string | TOutput>({
-		name: options.name ?? "pi-coding-agent",
-		run: ({ input, signal, setArtifact }) => runPiCodingAgent(input, signal, setArtifact, options),
+	return createHarness<TangentCodingAgentInput, string | TOutput>({
+		name: options.name ?? "tangent-coding-agent",
+		run: ({ input, signal, setArtifact }) => runTangentCodingAgent(input, signal, setArtifact, options),
 	});
 }

@@ -23,8 +23,8 @@ import {
 	type Session,
 	TODO_CONTEXT,
 	withCancel,
-} from "@earendil-works/pi-agent-core";
-import { NodeExecutionEnv } from "@earendil-works/pi-agent-core/node";
+} from "@tangent-ai/tangent-agent-core";
+import { NodeExecutionEnv } from "@tangent-ai/tangent-agent-core/node";
 import lockfile from "proper-lockfile";
 import Type, { type Static } from "typebox";
 import { Check } from "typebox/value";

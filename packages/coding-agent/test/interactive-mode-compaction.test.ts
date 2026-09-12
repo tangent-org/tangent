@@ -1,5 +1,5 @@
-import type { Usage } from "@earendil-works/pi-ai";
-import { Container } from "@earendil-works/pi-tui";
+import type { Usage } from "@tangent-ai/tangent-ai";
+import { Container } from "@tangent-ai/tangent-tui";
 import { describe, expect, test, vi } from "vitest";
 import type { SessionEntry } from "../src/core/session-manager.ts";
 import { InteractiveMode } from "../src/modes/interactive/interactive-mode.ts";

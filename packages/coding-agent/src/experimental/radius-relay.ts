@@ -1,6 +1,6 @@
-import type { ByteTransport, ByteTransportFactory, ByteTransportHandlers, Client } from "@earendil-works/pi-client";
-import { DEFAULT_MAX_FRAME_LENGTH, type ServerId } from "@earendil-works/pi-protocol";
-import type { Server } from "@earendil-works/pi-server";
+import type { ByteTransport, ByteTransportFactory, ByteTransportHandlers, Client } from "@tangent-ai/tangent-client";
+import { DEFAULT_MAX_FRAME_LENGTH, type ServerId } from "@tangent-ai/tangent-protocol";
+import type { Server } from "@tangent-ai/tangent-server";
 import { WebSocket } from "undici";
 import type { RadiusRelayAuthResolver } from "./radius-auth.ts";
 

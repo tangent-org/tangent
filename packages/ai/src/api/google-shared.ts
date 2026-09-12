@@ -28,7 +28,7 @@ type GoogleApiType = "google-generative-ai" | "google-vertex";
 export type GoogleApiThinkingLevel = "THINKING_LEVEL_UNSPECIFIED" | "MINIMAL" | "LOW" | "MEDIUM" | "HIGH";
 export type ResolvedGoogleThinkingLevel = Exclude<ThinkingLevel, "xhigh" | "max">;
 
-/** Resolve a supported pi level or model-specific Google mapping to a standard Google level. */
+/** Resolve a supported tangent level or model-specific Google mapping to a standard Google level. */
 export function resolveGoogleThinkingLevel<T extends GoogleApiType>(
 	model: Model<T>,
 	level: ModelThinkingLevel,
@@ -397,6 +397,7 @@ export function mapStopReason(reason: FinishReason): StopReason {
 		case FinishReason.MALFORMED_FUNCTION_CALL:
 		case FinishReason.UNEXPECTED_TOOL_CALL:
 		case FinishReason.NO_IMAGE:
+		case FinishReason.TOO_MANY_TOOL_CALLS:
 			return "error";
 		default: {
 			const _exhaustive: never = reason;

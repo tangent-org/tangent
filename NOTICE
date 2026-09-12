@@ -1,0 +1,13 @@
+# NOTICE
+
+Tangent is a fork of [pi](https://github.com/earendil-works/pi) by Mario Zechner
+(earendil-works), licensed under the MIT License (see LICENSE — original copyright
+"2025 Mario Zechner" retained).
+
+Brand renamed to Tangent (`tangent` CLI, `@tangent-ai/*` packages, `~/.tangent`
+config dir). Upstream changes are merged periodically from
+`earendil-works/pi` (remote: fork).
+
+Tangent-specific additions (not present upstream) live in:
+- `packages/coding-agent/src/extensions/wtangent/` — LAN/Web session service
+- future: `tangent git [-S]`, service registration (systemd/NSSM), side-agent pipeline

@@ -7,8 +7,8 @@ import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getPublicWorkspacePackages } from "./release-packages.mjs";
 
-const codingAgentName = "@earendil-works/pi-coding-agent";
-const developmentPackages = new Set(["pi-client", "pi-protocol", "pi-server"].map((name) => `@earendil-works/${name}`));
+const codingAgentName = "@tangent-ai/tangent-coding-agent";
+const developmentPackages = new Set(["tangent-client", "tangent-protocol", "tangent-server"].map((name) => `@earendil-works/${name}`));
 
 function run(command, args, options = {}) {
 	console.log(`$ ${[command, ...args].join(" ")}`);
@@ -92,7 +92,7 @@ export function smokeTestCodingAgentConsumer(directory, runtime = process.execPa
 		LOCALAPPDATA: home,
 		XDG_CONFIG_HOME: home,
 		XDG_CACHE_HOME: home,
-		PI_CODING_AGENT_DIR: join(home, ".pi", "agent"),
+		PI_CODING_AGENT_DIR: join(home, ".tangent", "agent"),
 		PI_OFFLINE: "1",
 		PI_TELEMETRY: "0",
 	};
@@ -105,7 +105,7 @@ import { createAgentSession, SessionManager, ModelRuntime } from "${codingAgentN
 assert.equal(typeof createAgentSession, "function");
 assert.equal(typeof SessionManager.inMemory, "function");
 assert.equal(typeof ModelRuntime.create, "function");
-for (const name of ["pi-client", "pi-protocol", "pi-server"]) {
+for (const name of ["tangent-client", "tangent-protocol", "tangent-server"]) {
   assert.throws(() => import.meta.resolve("@earendil-works/" + name), /Cannot find|cannot find/, name + " must not be installed");
 }
 for (const subpath of ["/client", "/experimental/plugin"]) {

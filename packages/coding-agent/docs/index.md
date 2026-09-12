@@ -1,13 +1,13 @@
 # Pi Documentation
 
-Pi is a minimal terminal coding harness. It is designed to stay small at the core while being extended through TypeScript extensions, skills, prompt templates, themes, and pi packages.
+Pi is a minimal terminal coding harness. It is designed to stay small at the core while being extended through TypeScript extensions, skills, prompt templates, themes, and tangent packages.
 
 ## Quick start
 
 Install Pi with npm:
 
 ```bash
-npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+npm install -g --ignore-scripts @tangent-ai/tangent-coding-agent
 ```
 
 `--ignore-scripts` disables dependency lifecycle scripts during install. Pi does not require install scripts for normal npm installs.
@@ -15,24 +15,24 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 On Linux or macOS, you can also use the installer:
 
 ```bash
-curl -fsSL https://pi.dev/install.sh | sh
+curl -fsSL https://tangent.dev/install.sh | sh
 ```
 
-To uninstall pi itself, use npm for curl and npm installs:
+To uninstall tangent itself, use npm for curl and npm installs:
 
 ```bash
-npm uninstall -g @earendil-works/pi-coding-agent
+npm uninstall -g @tangent-ai/tangent-coding-agent
 ```
 
-For pnpm, Yarn, or Bun installs, use the matching global remove command: `pnpm remove -g @earendil-works/pi-coding-agent`, `yarn global remove @earendil-works/pi-coding-agent`, or `bun uninstall -g @earendil-works/pi-coding-agent`.
+For pnpm, Yarn, or Bun installs, use the matching global remove command: `pnpm remove -g @tangent-ai/tangent-coding-agent`, `yarn global remove @tangent-ai/tangent-coding-agent`, or `bun uninstall -g @tangent-ai/tangent-coding-agent`.
 
 Then run it in a project directory:
 
 ```bash
-pi
+tangent
 ```
 
-Authenticate with `/login` for subscription providers, or set an API key such as `ANTHROPIC_API_KEY` before starting pi.
+Authenticate with `/login` for subscription providers, or set an API key such as `ANTHROPIC_API_KEY` before starting tangent.
 
 For the full first-run flow, see [Quickstart](quickstart.md).
 
@@ -43,7 +43,7 @@ For the full first-run flow, see [Quickstart](quickstart.md).
 - [Providers](providers.md) - subscription and API-key setup for built-in providers.
 - [llama.cpp](llama-cpp.md) - run a local router and manage models with `/llama`.
 - [Security](security.md) - project trust, sandbox boundaries, and vulnerability reporting.
-- [Containerization](containerization.md) - sandbox pi with Gondolin, Docker, or OpenShell.
+- [Containerization](containerization.md) - sandbox tangent with Gondolin, Docker, or OpenShell.
 - [Settings](settings.md) - global and project settings.
 - [Keybindings](keybindings.md) - default shortcuts and custom keybindings.
 - [Sessions](sessions.md) - session management, branching, and tree navigation.
@@ -61,7 +61,7 @@ For the full first-run flow, see [Quickstart](quickstart.md).
 
 ## Programmatic usage
 
-- [SDK](sdk.md) - embed pi in Node.js applications.
+- [SDK](sdk.md) - embed tangent in Node.js applications.
 - [RPC mode](rpc.md) - integrate over stdin/stdout JSONL.
 - [JSON event stream mode](json.md) - print mode with structured events.
 - [TUI components](tui.md) - build custom terminal UI for extensions.

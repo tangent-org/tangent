@@ -2,8 +2,8 @@
  * Hello Tool - Minimal custom tool example
  */
 
-import { Type } from "@earendil-works/pi-ai";
-import { defineTool, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Type } from "@tangent-ai/tangent-ai";
+import { defineTool, type ExtensionAPI } from "@tangent-ai/tangent-coding-agent";
 
 const helloTool = defineTool({
 	name: "hello",
@@ -21,6 +21,6 @@ const helloTool = defineTool({
 	},
 });
 
-export default function (pi: ExtensionAPI) {
-	pi.registerTool(helloTool);
+export default function (tangent: ExtensionAPI) {
+	tangent.registerTool(helloTool);
 }

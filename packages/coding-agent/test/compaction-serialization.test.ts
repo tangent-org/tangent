@@ -1,4 +1,4 @@
-import type { Message } from "@earendil-works/pi-ai";
+import type { Message } from "@tangent-ai/tangent-ai";
 import { describe, expect, it } from "vitest";
 import { serializeConversation } from "../src/core/compaction/utils.ts";
 

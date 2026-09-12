@@ -35,8 +35,8 @@ import {
 	type ProviderRequestOptions,
 	type SimpleStreamOptions,
 	type StreamOptions,
-} from "@earendil-works/pi-ai";
-import * as builtinProviderCatalog from "@earendil-works/pi-ai/providers/all";
+} from "@tangent-ai/tangent-ai";
+import * as builtinProviderCatalog from "@tangent-ai/tangent-ai/providers/all";
 import { getAgentDir } from "../config.ts";
 import { operationSignal, raceWithAbortSignal } from "../utils/abort.ts";
 import { AuthStorage as DefaultAuthStorage } from "./auth-storage.ts";

@@ -1,6 +1,6 @@
 import { constants } from "node:fs";
 import { access as fsAccess } from "node:fs/promises";
-import type { AgentTool } from "@earendil-works/pi-agent-core";
+import type { AgentTool } from "@tangent-ai/tangent-agent-core";
 import { spawn } from "child_process";
 import { type Static, Type } from "typebox";
 import { waitForChildProcess } from "../../utils/child-process.ts";
@@ -145,9 +145,9 @@ export function createLocalShellOperations(shellName: string, resolveShellConfig
 }
 
 /**
- * Create bash operations using pi's built-in local shell execution backend.
+ * Create bash operations using tangent's built-in local shell execution backend.
  *
- * This is useful for extensions that intercept user_bash and still want pi's
+ * This is useful for extensions that intercept user_bash and still want tangent's
  * standard local shell behavior while wrapping or rewriting commands.
  */
 export function createLocalBashOperations(options?: { shellPath?: string }): BashOperations {

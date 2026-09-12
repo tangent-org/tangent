@@ -6,7 +6,7 @@
 
 Schema version: 1
 
-### `pi.ai.request`
+### `tangent.ai.request`
 
 One logical request to an AI provider
 
@@ -18,12 +18,12 @@ One logical request to an AI provider
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.ai.operation` | `string` | yes | stream, fetch_deferred, cancel_deferred, generate_images |  | Logical provider operation |
-| `pi.ai.provider` | `string` | yes |  |  | Selected provider id |
-| `pi.ai.model` | `string` | yes |  |  | Requested model id |
-| `pi.ai.api` | `string` | yes |  |  | Provider API id |
-| `pi.ai.streaming` | `boolean` | yes |  |  | Whether this operation returns a stream |
-| `pi.ai.deferred` | `boolean` | no |  |  | Whether the operation requests or participates in deferred execution |
+| `tangent.ai.operation` | `string` | yes | stream, fetch_deferred, cancel_deferred, generate_images |  | Logical provider operation |
+| `tangent.ai.provider` | `string` | yes |  |  | Selected provider id |
+| `tangent.ai.model` | `string` | yes |  |  | Requested model id |
+| `tangent.ai.api` | `string` | yes |  |  | Provider API id |
+| `tangent.ai.streaming` | `boolean` | yes |  |  | Whether this operation returns a stream |
+| `tangent.ai.deferred` | `boolean` | no |  |  | Whether the operation requests or participates in deferred execution |
 
 #### End attributes
 
@@ -31,20 +31,20 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.ai.response.model` | `string` |  |  | Concrete response model |
-| `pi.ai.response.id` | `string` |  | high cardinality | Provider response id |
-| `pi.ai.response.stop_reason` | `string` | stop, length, tool_use, error, aborted, deferred |  | Normalized terminal response reason |
-| `pi.ai.http.status_code` | `number` |  |  | Final HTTP status |
-| `pi.ai.usage.input_tokens` | `number` |  |  | Reported input tokens |
-| `pi.ai.usage.output_tokens` | `number` |  |  | Reported output tokens |
-| `pi.ai.usage.cache_read_tokens` | `number` |  |  | Reported cache-read tokens |
-| `pi.ai.usage.cache_write_tokens` | `number` |  |  | Reported cache-write tokens |
-| `pi.ai.usage.reasoning_tokens` | `number` |  |  | Reported reasoning tokens |
-| `pi.ai.usage.total_tokens` | `number` |  |  | Reported total tokens |
-| `pi.ai.usage.cost` | `number` |  |  | Reported total cost |
-| `pi.ai.stream.chunk_count` | `number` |  |  | Streamed update chunk count |
-| `pi.ai.stream.time_to_first_chunk_ms` | `number` |  |  | Elapsed milliseconds to first update chunk |
-| `pi.ai.error.type` | `string` |  | low cardinality | Provider or transport error class |
+| `tangent.ai.response.model` | `string` |  |  | Concrete response model |
+| `tangent.ai.response.id` | `string` |  | high cardinality | Provider response id |
+| `tangent.ai.response.stop_reason` | `string` | stop, length, tool_use, error, aborted, deferred |  | Normalized terminal response reason |
+| `tangent.ai.http.status_code` | `number` |  |  | Final HTTP status |
+| `tangent.ai.usage.input_tokens` | `number` |  |  | Reported input tokens |
+| `tangent.ai.usage.output_tokens` | `number` |  |  | Reported output tokens |
+| `tangent.ai.usage.cache_read_tokens` | `number` |  |  | Reported cache-read tokens |
+| `tangent.ai.usage.cache_write_tokens` | `number` |  |  | Reported cache-write tokens |
+| `tangent.ai.usage.reasoning_tokens` | `number` |  |  | Reported reasoning tokens |
+| `tangent.ai.usage.total_tokens` | `number` |  |  | Reported total tokens |
+| `tangent.ai.usage.cost` | `number` |  |  | Reported total cost |
+| `tangent.ai.stream.chunk_count` | `number` |  |  | Streamed update chunk count |
+| `tangent.ai.stream.time_to_first_chunk_ms` | `number` |  |  | Elapsed milliseconds to first update chunk |
+| `tangent.ai.error.type` | `string` |  | low cardinality | Provider or transport error class |
 
 #### Events
 
@@ -54,7 +54,7 @@ No declared span events.
 
 Schema version: 1
 
-### `pi.harness.run`
+### `tangent.harness.run`
 
 One admitted in-process run invocation
 
@@ -66,11 +66,11 @@ One admitted in-process run invocation
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.session.id` | `string` | yes |  | high cardinality | Session id |
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.operation.recovery` | `boolean` | yes |  |  | Whether this invocation resumes durable work |
-| `pi.operation.kind` | `string` | yes | run |  | Run operation kind |
+| `tangent.session.id` | `string` | yes |  | high cardinality | Session id |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.operation.recovery` | `boolean` | yes |  |  | Whether this invocation resumes durable work |
+| `tangent.operation.kind` | `string` | yes | run |  | Run operation kind |
 
 #### End attributes
 
@@ -78,15 +78,15 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.operation.outcome` | `string` | completed, aborted, failed, suspended |  | Run invocation outcome |
-| `pi.error.code` | `string` |  | low cardinality | Stable operation error code |
-| `pi.error.type` | `string` |  | low cardinality | Low-cardinality operation error class |
+| `tangent.operation.outcome` | `string` | completed, aborted, failed, suspended |  | Run invocation outcome |
+| `tangent.error.code` | `string` |  | low cardinality | Stable operation error code |
+| `tangent.error.type` | `string` |  | low cardinality | Low-cardinality operation error class |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.compaction`
+### `tangent.harness.compaction`
 
 One admitted in-process manual compaction invocation
 
@@ -98,11 +98,11 @@ One admitted in-process manual compaction invocation
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.session.id` | `string` | yes |  | high cardinality | Session id |
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.operation.recovery` | `boolean` | yes |  |  | Whether this invocation resumes durable work |
-| `pi.operation.kind` | `string` | yes | compaction |  | Compaction operation kind |
+| `tangent.session.id` | `string` | yes |  | high cardinality | Session id |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.operation.recovery` | `boolean` | yes |  |  | Whether this invocation resumes durable work |
+| `tangent.operation.kind` | `string` | yes | compaction |  | Compaction operation kind |
 
 #### End attributes
 
@@ -110,15 +110,15 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.operation.outcome` | `string` | completed, declined, aborted, failed |  | Compaction invocation outcome |
-| `pi.error.code` | `string` |  | low cardinality | Stable operation error code |
-| `pi.error.type` | `string` |  | low cardinality | Low-cardinality operation error class |
+| `tangent.operation.outcome` | `string` | completed, declined, aborted, failed |  | Compaction invocation outcome |
+| `tangent.error.code` | `string` |  | low cardinality | Stable operation error code |
+| `tangent.error.type` | `string` |  | low cardinality | Low-cardinality operation error class |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.navigation`
+### `tangent.harness.navigation`
 
 One admitted in-process navigation invocation
 
@@ -130,11 +130,11 @@ One admitted in-process navigation invocation
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.session.id` | `string` | yes |  | high cardinality | Session id |
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.operation.recovery` | `boolean` | yes |  |  | Whether this invocation resumes durable work |
-| `pi.operation.kind` | `string` | yes | navigation |  | Navigation operation kind |
+| `tangent.session.id` | `string` | yes |  | high cardinality | Session id |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.operation.recovery` | `boolean` | yes |  |  | Whether this invocation resumes durable work |
+| `tangent.operation.kind` | `string` | yes | navigation |  | Navigation operation kind |
 
 #### End attributes
 
@@ -142,19 +142,19 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.operation.outcome` | `string` | completed, declined, aborted, failed |  | Navigation invocation outcome |
-| `pi.error.code` | `string` |  | low cardinality | Stable operation error code |
-| `pi.error.type` | `string` |  | low cardinality | Low-cardinality operation error class |
+| `tangent.operation.outcome` | `string` | completed, declined, aborted, failed |  | Navigation invocation outcome |
+| `tangent.error.code` | `string` |  | low cardinality | Stable operation error code |
+| `tangent.error.type` | `string` |  | low cardinality | Low-cardinality operation error class |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.checkpoint`
+### `tangent.harness.checkpoint`
 
 One run checkpoint
 
-- Parents: `pi.harness.run`
+- Parents: `tangent.harness.run`
 - Default status: `ok`
 - Error when: Checkpoint work throws
 
@@ -162,9 +162,9 @@ One run checkpoint
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.checkpoint.kind` | `string` | yes | normal, abort_reconcile |  | Checkpoint purpose |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.checkpoint.kind` | `string` | yes | normal, abort_reconcile |  | Checkpoint purpose |
 
 #### End attributes
 
@@ -178,11 +178,11 @@ All end attributes are optional completion enrichment.
 
 No declared span events.
 
-### `pi.harness.turn`
+### `tangent.harness.turn`
 
 One assistant response and its tool batch
 
-- Parents: `pi.harness.run`
+- Parents: `tangent.harness.run`
 - Default status: `ok`
 - Error when: Turn work throws
 
@@ -190,9 +190,9 @@ One assistant response and its tool batch
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.turn.id` | `string` | yes |  | high cardinality | Invocation-local turn id |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.turn.id` | `string` | yes |  | high cardinality | Invocation-local turn id |
 
 #### End attributes
 
@@ -206,11 +206,11 @@ All end attributes are optional completion enrichment.
 
 No declared span events.
 
-### `pi.harness.step`
+### `tangent.harness.step`
 
 One durable retry attempt
 
-- Parents: `pi.harness.turn`, `pi.harness.checkpoint`, `pi.harness.compaction`, `pi.harness.navigation`
+- Parents: `tangent.harness.turn`, `tangent.harness.checkpoint`, `tangent.harness.compaction`, `tangent.harness.navigation`
 - Default status: `ok`
 - Error when: The attempt retries, fails, or throws
 
@@ -218,11 +218,11 @@ One durable retry attempt
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.step.kind` | `string` | yes | assistant, compaction, branch_summary |  | Retryable step kind |
-| `pi.step.attempt` | `number` | yes |  |  | One-based durable attempt number |
-| `pi.compaction.reason` | `string` | no | manual, threshold, overflow |  | Compaction trigger |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.step.kind` | `string` | yes | assistant, compaction, branch_summary |  | Retryable step kind |
+| `tangent.step.attempt` | `number` | yes |  |  | One-based durable attempt number |
+| `tangent.compaction.reason` | `string` | no | manual, threshold, overflow |  | Compaction trigger |
 
 #### End attributes
 
@@ -230,17 +230,17 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.step.outcome` | `string` | succeeded, retry, failed, aborted, deferred, overflow |  | Attempt outcome |
+| `tangent.step.outcome` | `string` | succeeded, retry, failed, aborted, deferred, overflow |  | Attempt outcome |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.tool`
+### `tangent.harness.tool`
 
 One raw phase-2 tool execution
 
-- Parents: `pi.harness.turn`, `pi.harness.run`
+- Parents: `tangent.harness.turn`, `tangent.harness.run`
 - Default status: `ok`
 - Error when: Raw phase-2 execution returns an error
 
@@ -248,13 +248,13 @@ One raw phase-2 tool execution
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.turn.id` | `string` | no |  | high cardinality | Invocation-local live turn id |
-| `pi.tool.name` | `string` | yes |  |  | Tool name |
-| `pi.tool.call_id` | `string` | yes |  | high cardinality | Tool call id |
-| `pi.tool.replay` | `string` | yes | never, safe |  | Declared replay policy |
-| `pi.tool.recovery` | `boolean` | yes |  |  | Whether this is recovery execution |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.turn.id` | `string` | no |  | high cardinality | Invocation-local live turn id |
+| `tangent.tool.name` | `string` | yes |  |  | Tool name |
+| `tangent.tool.call_id` | `string` | yes |  | high cardinality | Tool call id |
+| `tangent.tool.replay` | `string` | yes | never, safe |  | Declared replay policy |
+| `tangent.tool.recovery` | `boolean` | yes |  |  | Whether this is recovery execution |
 
 #### End attributes
 
@@ -262,13 +262,13 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.tool.is_error` | `boolean` |  |  | Whether raw phase-2 execution returned an error |
+| `tangent.tool.is_error` | `boolean` |  |  | Whether raw phase-2 execution returned an error |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.hook`
+### `tangent.harness.hook`
 
 One registered hook handler invocation
 
@@ -280,10 +280,10 @@ One registered hook handler invocation
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.lane.name` | `string` | yes |  | high cardinality | Lane name |
-| `pi.operation.id` | `string` | no |  | high cardinality | Durable operation id when accepted |
-| `pi.hook.name` | `string` | yes | before_run, before_drive, before_run_end, transform_context, before_request, before_payload, after_response, before_tool, after_tool, before_compaction, before_navigation |  | Hook name |
-| `pi.hook.registration_id` | `string` | no |  |  | Optional hook registration metadata |
+| `tangent.lane.name` | `string` | yes |  | high cardinality | Lane name |
+| `tangent.operation.id` | `string` | no |  | high cardinality | Durable operation id when accepted |
+| `tangent.hook.name` | `string` | yes | before_run, before_drive, before_run_end, transform_context, before_request, before_payload, after_response, before_tool, after_tool, before_compaction, before_navigation |  | Hook name |
+| `tangent.hook.registration_id` | `string` | no |  |  | Optional hook registration metadata |
 
 #### End attributes
 
@@ -291,17 +291,17 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.hook.outcome` | `string` | completed, skipped, blocked, failed |  | Handler outcome |
+| `tangent.hook.outcome` | `string` | completed, skipped, blocked, failed |  | Handler outcome |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.sleep`
+### `tangent.harness.sleep`
 
 One retry delay
 
-- Parents: `pi.harness.run`, `pi.harness.compaction`, `pi.harness.navigation`, `pi.harness.turn`, `pi.harness.checkpoint`
+- Parents: `tangent.harness.run`, `tangent.harness.compaction`, `tangent.harness.navigation`, `tangent.harness.turn`, `tangent.harness.checkpoint`
 - Default status: `ok`
 - Error when: Sleep work throws
 
@@ -309,8 +309,8 @@ One retry delay
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
-| `pi.sleep.delay_ms` | `number` | yes |  |  | Requested delay in milliseconds |
+| `tangent.operation.id` | `string` | yes |  | high cardinality | Durable operation id |
+| `tangent.sleep.delay_ms` | `number` | yes |  |  | Requested delay in milliseconds |
 
 #### End attributes
 
@@ -318,13 +318,13 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.sleep.outcome` | `string` | elapsed, aborted |  | Delay outcome |
+| `tangent.sleep.outcome` | `string` | elapsed, aborted |  | Delay outcome |
 
 #### Events
 
 No declared span events.
 
-### `pi.harness.event_handler`
+### `tangent.harness.event_handler`
 
 One passive event listener invocation
 
@@ -336,8 +336,8 @@ One passive event listener invocation
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.event.type` | `string` | yes | run_start, run_resume, run_suspend, operation_abort, run_end, fault, handler_error, turn_start, turn_end, retry_scheduled, retry_start, retry_end, message_start, message_update, message_end, tool_start, tool_update, tool_end, entry_added, queue_update, value_update, config_update, compaction_start, compaction_end, navigation_start, navigation_end, lane_created, usage | low cardinality | Delivered harness event type |
-| `pi.lane.name` | `string` | no |  | high cardinality | Lane name for lane-scoped events |
+| `tangent.event.type` | `string` | yes | run_start, run_resume, run_suspend, operation_abort, run_end, fault, handler_error, turn_start, turn_end, retry_scheduled, retry_start, retry_end, message_start, message_update, message_end, tool_start, tool_update, tool_end, entry_added, queue_update, value_update, config_update, compaction_start, compaction_end, navigation_start, navigation_end, lane_created, usage | low cardinality | Delivered harness event type |
+| `tangent.lane.name` | `string` | no |  | high cardinality | Lane name for lane-scoped events |
 
 #### End attributes
 
@@ -351,7 +351,7 @@ All end attributes are optional completion enrichment.
 
 No declared span events.
 
-### `pi.session.write`
+### `tangent.session.write`
 
 One committed session transaction
 
@@ -363,11 +363,11 @@ One committed session transaction
 
 | Name | Type | Required | Values | Notes | Description |
 |---|---|---:|---|---|---|
-| `pi.session.id` | `string` | yes |  | high cardinality | Session id |
-| `pi.lane.name` | `string` | no |  | high cardinality | Lane name when supplied by the caller |
-| `pi.operation.id` | `string` | no |  | high cardinality | Durable operation id when supplied by the caller |
-| `pi.session.item_count` | `number` | yes |  |  | Number of writes in the transaction |
-| `pi.session.item_kinds` | `string[]` | yes | elements: entry, usage, value, list |  | Distinct write kinds in the transaction |
+| `tangent.session.id` | `string` | yes |  | high cardinality | Session id |
+| `tangent.lane.name` | `string` | no |  | high cardinality | Lane name when supplied by the caller |
+| `tangent.operation.id` | `string` | no |  | high cardinality | Durable operation id when supplied by the caller |
+| `tangent.session.item_count` | `number` | yes |  |  | Number of writes in the transaction |
+| `tangent.session.item_kinds` | `string[]` | yes | elements: entry, usage, value, list |  | Distinct write kinds in the transaction |
 
 #### End attributes
 
@@ -375,8 +375,8 @@ All end attributes are optional completion enrichment.
 
 | Name | Type | Values | Notes | Description |
 |---|---|---|---|---|
-| `pi.session.first_seq` | `number` |  |  | First committed sequence in the transaction |
-| `pi.session.last_seq` | `number` |  |  | Last committed sequence in the transaction |
+| `tangent.session.first_seq` | `number` |  |  | First committed sequence in the transaction |
+| `tangent.session.last_seq` | `number` |  |  | Last committed sequence in the transaction |
 
 #### Events
 

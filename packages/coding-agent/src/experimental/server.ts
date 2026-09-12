@@ -9,19 +9,19 @@ import {
 	type JsonlSessionMetadata,
 	JsonlSessionRepo,
 	TODO_CONTEXT,
-} from "@earendil-works/pi-agent-core";
-import { NodeExecutionEnv } from "@earendil-works/pi-agent-core/node";
-import { Client, ServerError as ClientServerError, DisconnectedError } from "@earendil-works/pi-client";
-import { createUnixTransportFactory, type UnixServerRoute } from "@earendil-works/pi-client/unix";
-import { isServerId, type ServerId } from "@earendil-works/pi-protocol";
+} from "@tangent-ai/tangent-agent-core";
+import { NodeExecutionEnv } from "@tangent-ai/tangent-agent-core/node";
+import { Client, ServerError as ClientServerError, DisconnectedError } from "@tangent-ai/tangent-client";
+import { createUnixTransportFactory, type UnixServerRoute } from "@tangent-ai/tangent-client/unix";
+import { isServerId, type ServerId } from "@tangent-ai/tangent-protocol";
 import {
 	ServerError as RoutedServerError,
 	type Server,
 	type ServerHost,
 	SessionAmbiguousError,
 	SessionNotFoundError,
-} from "@earendil-works/pi-server";
-import { createUnixServer, getUnixSocketPath } from "@earendil-works/pi-server/unix";
+} from "@tangent-ai/tangent-server";
+import { createUnixServer, getUnixSocketPath } from "@tangent-ai/tangent-server/unix";
 import lockfile from "proper-lockfile";
 import type { AuthInput } from "../cli/experimental/command-options.ts";
 import { getAgentDir } from "../config.ts";
@@ -48,11 +48,11 @@ import { createExperimentalServerServices } from "./services/server.ts";
 import type { SessionCreateOptions, SessionSummary } from "./services/sessions.ts";
 import { SessionPluginSelectionConflictError, SessionWorkerManager } from "./session-worker-manager.ts";
 
-export const ENV_SERVER_DIR = "PI_SERVER_DIR";
-export const ENV_SERVER_ID = "PI_SERVER_ID";
+export const ENV_SERVER_DIR = "TANGENT_SERVER_DIR";
+export const ENV_SERVER_ID = "TANGENT_SERVER_ID";
 
 export function resolveServerDirectory(directory?: string): string {
-	return resolvePath(directory ?? process.env[ENV_SERVER_DIR] ?? join(homedir(), ".pi", "server"));
+	return resolvePath(directory ?? process.env[ENV_SERVER_DIR] ?? join(homedir(), ".tangent", "server"));
 }
 
 export async function ensurePrivateServerDirectory(directory: string): Promise<void> {
@@ -331,9 +331,9 @@ export interface RunningServer {
 }
 
 export interface StartServerOptions {
-	/** Server profile and socket directory. Defaults to PI_SERVER_DIR or ~/.pi/server. */
+	/** Server profile and socket directory. Defaults to TANGENT_SERVER_DIR or ~/.tangent/server. */
 	readonly directory?: string;
-	/** Logical service ID. Defaults to PI_SERVER_ID or the directory's default-server-id. */
+	/** Logical service ID. Defaults to TANGENT_SERVER_ID or the directory's default-server-id. */
 	readonly serverId?: ServerId;
 	/** Durable session directory. Defaults to the experimental directory under the configured agent directory. */
 	readonly sessionDir?: string;

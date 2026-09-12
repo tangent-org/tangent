@@ -2,7 +2,7 @@
 
 ## Status and baseline
 
-- Repository: `earendil-works/pi`
+- Repository: `earendil-works/tangent`
 - Branch at handoff creation: `dev`
 - Baseline commit: `d14d6b22327d545d6a253f932165b63e48d7f9c8`
 - The user reported the worktree clean immediately before this handoff.

@@ -24,7 +24,7 @@ npm --prefix packages/tui run build:native:win32
 On a Windows test desktop, run from `packages/tui` in PowerShell:
 
 ```powershell
-$env:PI_TEST_NATIVE_CLIPBOARD = "1"
+$env:TANGENT_TEST_NATIVE_CLIPBOARD = "1"
 node --test test/native-platform.test.ts
 ```
 

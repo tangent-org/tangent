@@ -374,12 +374,12 @@ export class HookRegistry implements Hooks {
 		context: Context,
 	): Promise<unknown> {
 		return startHarnessSpan(
-			"pi.harness.hook",
+			"tangent.harness.hook",
 			{
-				"pi.lane.name": event.lane,
-				"pi.operation.id": event.runId,
-				"pi.hook.name": name,
-				...(registration.id === undefined ? {} : { "pi.hook.registration_id": registration.id }),
+				"tangent.lane.name": event.lane,
+				"tangent.operation.id": event.runId,
+				"tangent.hook.name": name,
+				...(registration.id === undefined ? {} : { "tangent.hook.registration_id": registration.id }),
 			},
 			async (span, spanContext) => {
 				try {
@@ -390,10 +390,10 @@ export class HookRegistry implements Hooks {
 						typeof result === "object" &&
 						"block" in result &&
 						result.block !== undefined;
-					span.setAttributes({ "pi.hook.outcome": blocked ? "blocked" : "completed" });
+					span.setAttributes({ "tangent.hook.outcome": blocked ? "blocked" : "completed" });
 					return result;
 				} catch (error) {
-					span.setAttributes({ "pi.hook.outcome": "failed" });
+					span.setAttributes({ "tangent.hook.outcome": "failed" });
 					span.setStatus({ status: "error" });
 					throw error;
 				}

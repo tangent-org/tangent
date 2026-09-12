@@ -8,7 +8,7 @@ import {
 	LaneBusy,
 	UnknownSkill,
 	UnknownTemplate,
-} from "@earendil-works/pi-agent-core";
+} from "@tangent-ai/tangent-agent-core";
 import { describe, expect, test, vi } from "vitest";
 import { AgentController } from "../src/experimental/services/agent-controller.ts";
 import { createAgentController } from "../src/experimental/services/agent-controller-provider.ts";

@@ -8,15 +8,15 @@ import { installCodingAgentConsumer, packReleasePackages, smokeTestCodingAgentCo
 
 const packages = [
 	{ directory: "packages/chord", name: "@earendil-works/chord" },
-	{ directory: "packages/telemetry", name: "@earendil-works/pi-telemetry" },
-	{ directory: "packages/ai", name: "@earendil-works/pi-ai" },
-	{ directory: "packages/tui", name: "@earendil-works/pi-tui" },
-	{ directory: "packages/agent", name: "@earendil-works/pi-agent-core" },
-	{ directory: "packages/protocol", name: "@earendil-works/pi-protocol" },
-	{ directory: "packages/client", name: "@earendil-works/pi-client" },
-	{ directory: "packages/session-backends/sqlite-node", name: "@earendil-works/pi-session-backend-sqlite-node" },
-	{ directory: "packages/server", name: "@earendil-works/pi-server" },
-	{ directory: "packages/coding-agent", name: "@earendil-works/pi-coding-agent" },
+	{ directory: "packages/telemetry", name: "@tangent-ai/tangent-telemetry" },
+	{ directory: "packages/ai", name: "@tangent-ai/tangent-ai" },
+	{ directory: "packages/tui", name: "@tangent-ai/tangent-tui" },
+	{ directory: "packages/agent", name: "@tangent-ai/tangent-agent-core" },
+	{ directory: "packages/protocol", name: "@tangent-ai/tangent-protocol" },
+	{ directory: "packages/client", name: "@tangent-ai/tangent-client" },
+	{ directory: "packages/session-backends/sqlite-node", name: "@tangent-ai/tangent-session-backend-sqlite-node" },
+	{ directory: "packages/server", name: "@tangent-ai/tangent-server" },
+	{ directory: "packages/coding-agent", name: "@tangent-ai/tangent-coding-agent" },
 ];
 
 function printUsage() {
@@ -185,7 +185,7 @@ const options = parseArgs();
 const repoRoot = process.cwd();
 const rootPackageJson = readPackageJson(repoRoot);
 
-if (rootPackageJson.name !== "pi-monorepo") {
+if (rootPackageJson.name !== "tangent-monorepo") {
 	throw new Error("Run this script from the repository root");
 }
 

@@ -14,8 +14,8 @@ import {
 	type Context,
 	type JsonlSessionMetadata,
 	TODO_CONTEXT,
-} from "@earendil-works/pi-agent-core";
-import { type RoutedSessionAttachment, type RoutedSessionHandle, ServerError } from "@earendil-works/pi-server";
+} from "@tangent-ai/tangent-agent-core";
+import { type RoutedSessionAttachment, type RoutedSessionHandle, ServerError } from "@tangent-ai/tangent-server";
 import { Check } from "typebox/value";
 import type { CoordinatorConnection, CoordinatorConnectionEvent } from "./coordinator.ts";
 import { spawnInternalProcess } from "./process.ts";

@@ -2,11 +2,11 @@ import { deepStrictEqual } from "node:assert/strict";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
-import { type Api, type Context, contentText, type Model, type ModelsSimpleStreamOptions } from "@earendil-works/pi-ai";
-import { type AgentSession, ModelRuntime } from "@earendil-works/pi-coding-agent";
+import { type Api, type Context, contentText, type Model, type ModelsSimpleStreamOptions } from "@tangent-ai/tangent-ai";
+import { type AgentSession, ModelRuntime } from "@tangent-ai/tangent-coding-agent";
 import { afterAll, beforeAll, beforeEach, describe, expect } from "vitest";
 import { createJudge, describeEval } from "vitest-evals";
-import { createPiCodingAgentHarness, excludePiDocumentation, type PiCodingAgentInput } from "./pi-harness.ts";
+import { createTangentCodingAgentHarness, excludePiDocumentation, type TangentCodingAgentInput } from "./pi-harness.ts";
 import { evalHarnessTable } from "./vitest-evals/harness-table.ts";
 
 const PROVIDER_ID = "acme";
@@ -259,7 +259,7 @@ function createProviderHarness(
 	transformSystemPrompt?: (defaultPrompt: string) => string,
 	resolveRuntime: RuntimeResolver = async (session) => session.modelRuntime,
 ) {
-	return createPiCodingAgentHarness({
+	return createTangentCodingAgentHarness({
 		name,
 		...(transformSystemPrompt ? { transformSystemPrompt } : {}),
 		output: async ({ session, systemPrompt, agentDir }) => {
@@ -279,7 +279,7 @@ function createProviderHarness(
 }
 
 function createProviderRuntimeJudge(expected: ProviderRuntimeSuccess) {
-	return createJudge<PiCodingAgentInput, ProviderRuntimeOutput>("ProviderRuntimeJudge", ({ output }) => {
+	return createJudge<TangentCodingAgentInput, ProviderRuntimeOutput>("ProviderRuntimeJudge", ({ output }) => {
 		if ("error" in output.result) {
 			return { score: 0, metadata: { rationale: output.result.error } };
 		}

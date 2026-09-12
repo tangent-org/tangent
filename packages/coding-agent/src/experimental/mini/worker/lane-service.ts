@@ -7,8 +7,8 @@
  */
 
 import { randomUUID } from "node:crypto";
-import type { AgentLane, Context, HarnessEvent, LaneSnapshot, WatchHandle } from "@earendil-works/pi-agent-core";
-import type { Models } from "@earendil-works/pi-ai";
+import type { AgentLane, Context, HarnessEvent, LaneSnapshot, WatchHandle } from "@tangent-ai/tangent-agent-core";
+import type { Models } from "@tangent-ai/tangent-ai";
 import type {
 	CommandResult,
 	LaneServiceApi,

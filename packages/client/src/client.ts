@@ -27,7 +27,7 @@ import {
 	type ServerHello,
 	type ServiceEventEnvelope,
 	type SessionTarget,
-} from "@earendil-works/pi-protocol";
+} from "@tangent-ai/tangent-protocol";
 import { Connection } from "./connection.ts";
 import { ClientDisposedError, DisconnectedError, ServerError, toError } from "./errors.ts";
 import { createPromiseResolvers } from "./promise.ts";

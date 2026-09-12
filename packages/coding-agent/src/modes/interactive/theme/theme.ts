@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
+import type { ThinkingLevel } from "@tangent-ai/tangent-agent-core";
 import {
 	type EditorTheme,
 	getCapabilities,
@@ -8,7 +8,7 @@ import {
 	type RgbColor,
 	type SelectListTheme,
 	type SettingsListTheme,
-} from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-tui";
 import chalk from "chalk";
 import { getCustomThemesDir, getThemesDir } from "../../../config.ts";
 import type { SourceInfo } from "../../../core/source-info.ts";
@@ -737,7 +737,7 @@ export function getDefaultTheme(): string {
 // ============================================================================
 
 // Use globalThis to share theme across module loaders (tsx + jiti in dev mode)
-const THEME_KEY = Symbol.for("@earendil-works/pi-coding-agent:theme");
+const THEME_KEY = Symbol.for("@tangent-ai/tangent-coding-agent:theme");
 const THEME_KEY_OLD = Symbol.for("@mariozechner/pi-coding-agent:theme");
 
 // Export theme as a getter that reads from globalThis

@@ -1,16 +1,16 @@
-# @earendil-works/pi-session-backend-sqlite-node
+# @tangent-ai/tangent-session-backend-sqlite-node
 
-Node `node:sqlite` Session backend for `@earendil-works/pi-agent-core`.
+Node `node:sqlite` Session backend for `@tangent-ai/tangent-agent-core`.
 
 ```ts
-import { BACKGROUND_CONTEXT } from "@earendil-works/pi-agent-core";
+import { BACKGROUND_CONTEXT } from "@tangent-ai/tangent-agent-core";
 import {
   createNodeSqliteFactory,
   SqliteSessionRepo,
-} from "@earendil-works/pi-session-backend-sqlite-node";
+} from "@tangent-ai/tangent-session-backend-sqlite-node";
 
 const repository = new SqliteSessionRepo({
-  directory: "/var/lib/pi/sessions",
+  directory: "/var/lib/tangent/sessions",
   databaseFactory: createNodeSqliteFactory(),
 });
 

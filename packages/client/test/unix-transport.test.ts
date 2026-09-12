@@ -2,7 +2,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { createServer, type Server, type Socket } from "node:net";
 import { join } from "node:path";
 import { parseServiceCall } from "@earendil-works/chord";
-import { ClientMessageDecoder, encodeServerMessage, PROTOCOL_VERSION } from "@earendil-works/pi-protocol";
+import { ClientMessageDecoder, encodeServerMessage, PROTOCOL_VERSION } from "@tangent-ai/tangent-protocol";
 import { afterEach, describe, expect, test } from "vitest";
 import { Client } from "../src/index.ts";
 import { createUnixTransportFactory } from "../src/unix.ts";
@@ -15,7 +15,7 @@ const sockets = new Set<Socket>();
 async function makeSocketPath(): Promise<string> {
 	const directory = await mkdtemp(join("/tmp", "pi-client-transport-"));
 	tempDirectories.add(directory);
-	return join(directory, "pi.sock");
+	return join(directory, "tangent.sock");
 }
 
 async function listen(server: Server, path: string): Promise<void> {
@@ -48,7 +48,7 @@ afterEach(async () => {
 
 test("rejects invalid Unix transport options", () => {
 	expect(() => createUnixTransportFactory({ path: "" })).toThrow(/must not be empty/);
-	expect(() => createUnixTransportFactory({ path: "/tmp/pi.sock", maxPendingBytes: 0 })).toThrow(/positive/);
+	expect(() => createUnixTransportFactory({ path: "/tmp/tangent.sock", maxPendingBytes: 0 })).toThrow(/positive/);
 });
 
 describe.runIf(process.platform !== "win32")("createUnixTransportFactory", () => {

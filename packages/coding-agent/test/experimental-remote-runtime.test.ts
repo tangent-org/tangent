@@ -3,8 +3,8 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Context, createFacetHost, defineFacet, defineService } from "@earendil-works/chord";
 import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import { Client, ServerError as ClientServerError } from "@earendil-works/pi-client";
-import { createUnixTransportFactory } from "@earendil-works/pi-client/unix";
+import { Client, ServerError as ClientServerError } from "@tangent-ai/tangent-client";
+import { createUnixTransportFactory } from "@tangent-ai/tangent-client/unix";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { ExampleFacetService } from "../examples/plugins/pi-example-plugin/src/contract.ts";
 import { runClient } from "../src/experimental/client.ts";
@@ -82,12 +82,12 @@ afterEach(async () => {
 });
 
 describe("experimental durable server composition", () => {
-	test("uses PI_SERVER_DIR and PI_SERVER_ID", async () => {
+	test("uses TANGENT_SERVER_DIR and TANGENT_SERVER_ID", async () => {
 		const directory = await mkdtemp(join("/tmp", "pi-server-dir-"));
 		directories.add(directory);
 		const serverId = "00000000-0000-4000-8000-000000000001";
-		vi.stubEnv("PI_SERVER_DIR", directory);
-		vi.stubEnv("PI_SERVER_ID", serverId);
+		vi.stubEnv("TANGENT_SERVER_DIR", directory);
+		vi.stubEnv("TANGENT_SERVER_ID", serverId);
 		const runtime = await startServer();
 		servers.add(runtime);
 
@@ -168,8 +168,8 @@ describe("experimental durable server composition", () => {
 		const directory = await mkdtemp(join("/tmp", "pi-auto-server-"));
 		directories.add(directory);
 		const serverId = "00000000-0000-4000-8000-000000000001";
-		vi.stubEnv("PI_SERVER_DIR", directory);
-		vi.stubEnv("PI_SERVER_ID", serverId);
+		vi.stubEnv("TANGENT_SERVER_DIR", directory);
+		vi.stubEnv("TANGENT_SERVER_ID", serverId);
 
 		const results = await Promise.all([runClient({ command: "client" }), runClient({ command: "client" })]);
 		expect(results).toEqual([
@@ -198,8 +198,8 @@ describe("experimental durable server composition", () => {
 		directories.add(directory);
 		const serverId = "00000000-0000-4000-8000-000000000001";
 		const packagePath = fileURLToPath(new URL("../examples/plugins/pi-example-plugin", import.meta.url));
-		vi.stubEnv("PI_SERVER_DIR", directory);
-		vi.stubEnv("PI_SERVER_ID", serverId);
+		vi.stubEnv("TANGENT_SERVER_DIR", directory);
+		vi.stubEnv("TANGENT_SERVER_ID", serverId);
 
 		const first = await openClientRuntime({ command: "client", ...sessionWorkerModel });
 		try {
@@ -210,7 +210,7 @@ describe("experimental durable server composition", () => {
 			);
 			await activated.management.attach("demo-1", BACKGROUND_CONTEXT);
 			const loaded = await createPresentationFacetLoaders(presentationPlugins)[0]!.load();
-			expect(loaded.facets.map(({ id }) => id)).toEqual(["@earendil-works/pi-example-plugin/tui"]);
+			expect(loaded.facets.map(({ id }) => id)).toEqual(["@tangent-ai/tangent-example-plugin/tui"]);
 			await loaded.dispose();
 		} finally {
 			await first.dispose();
@@ -235,8 +235,8 @@ describe("experimental durable server composition", () => {
 		const directory = await mkdtemp(join("/tmp", "pi-auto-session-"));
 		directories.add(directory);
 		const serverId = "00000000-0000-4000-8000-000000000001";
-		vi.stubEnv("PI_SERVER_DIR", directory);
-		vi.stubEnv("PI_SERVER_ID", serverId);
+		vi.stubEnv("TANGENT_SERVER_DIR", directory);
+		vi.stubEnv("TANGENT_SERVER_ID", serverId);
 
 		await expect(runClient({ command: "client", sessionId: "demo-1", ...sessionWorkerModel })).resolves.toEqual({
 			kind: "attached",

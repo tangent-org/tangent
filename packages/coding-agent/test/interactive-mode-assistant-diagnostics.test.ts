@@ -1,5 +1,5 @@
-import type { AssistantMessage } from "@earendil-works/pi-ai";
-import { Container } from "@earendil-works/pi-tui";
+import type { AssistantMessage } from "@tangent-ai/tangent-ai";
+import { Container } from "@tangent-ai/tangent-tui";
 import { describe, expect, test } from "vitest";
 import { InteractiveMode } from "../src/modes/interactive/interactive-mode.ts";
 import { initTheme } from "../src/modes/interactive/theme/theme.ts";

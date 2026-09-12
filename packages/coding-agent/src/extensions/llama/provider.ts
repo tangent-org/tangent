@@ -6,8 +6,8 @@ import type {
 	Provider,
 	ProviderStreamOptions,
 	RefreshModelsContext,
-} from "@earendil-works/pi-ai";
-import { stream, streamSimple } from "@earendil-works/pi-ai/compat";
+} from "@tangent-ai/tangent-ai";
+import { stream, streamSimple } from "@tangent-ai/tangent-ai/compat";
 import { LlamaClient, type LlamaModelInfo, llamaInferenceUrl, normalizeLlamaServerUrl } from "./client.ts";
 
 export const LLAMA_PROVIDER_ID = "llama.cpp";

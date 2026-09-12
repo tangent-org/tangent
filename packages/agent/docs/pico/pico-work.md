@@ -367,7 +367,7 @@ nonempty and land at post_tools/final boundaries. Data-only entries are never bl
 
 ## 11. Inbox
 
-`pi.inbox` as a conversation sticky list whose element id is `inputId` and whose value holds mode,
+`tangent.inbox` as a conversation sticky list whose element id is `inputId` and whose value holds mode,
 user content or a write's entry draft and optional request id; append/remove/clear watch operations;
 queued/placed/done/unanswered result variants; the three placement points; carried generation/post_tools
 input groups; `queueInput` and `abortInput`; abort draining steer and followUp while preserving write
@@ -431,7 +431,7 @@ equal to the live preview; a sliding tool tail → `t` + `a`.
 
 `ConversationView`, `ConversationEvent`, the exported kind-free `applyEvent`, `WatchHandle`
 (capture on the line, bounded buffering, `resnapshot`, `unsubscribe`), the session watch with
-`report` and `usage`, the usage ledger (`pi.usage` + totals).
+`report` and `usage`, the usage ledger (`tangent.usage` + totals).
 
 Tests: the fold is correct (view after N events equals a fresh capture, randomized); head and edit
 entries update derived context; inbox append/remove/clear operations update the view and same-commit
@@ -482,8 +482,8 @@ seam files (`session-worker.ts`, `agent-controller-provider.ts`, `models-provide
 model, a retry, a spawned subagent surviving a restart, speculative compaction under a running turn.
 
 **External prerequisite, not landed functionality.** PRs
-[#9116](https://github.com/earendil-works/pi/pull/9116) and
-[#9117](https://github.com/earendil-works/pi/pull/9117) are open dependencies in this design round.
+[#9116](https://github.com/earendil-works/tangent/pull/9116) and
+[#9117](https://github.com/earendil-works/tangent/pull/9117) are open dependencies in this design round.
 Their agreed target and fixtures must be delivered and verified before integration; neither an open
 PR's types nor this plan establish that the behavior already exists.
 
@@ -574,7 +574,7 @@ Depend on, as packages (they are not the old harness):
 
 - `@earendil-works/chord` Context types and `@earendil-works/chord/context` helpers (1, 6, 8, 19)
 - `@earendil-works/chord/delta` (15, 16: preview/watch only; not storage)
-- `@earendil-works/pi-ai`: `faux` provider for tests, `utils/estimate` for thresholds; SystemMessage and
+- `@tangent-ai/tangent-ai`: `faux` provider for tests, `utils/estimate` for thresholds; SystemMessage and
   messages-only adapter behavior depend on the verified PR #9116/#9117 target above (4, 9, 12, 20)
 
 Read before writing the equivalent, then close the file:

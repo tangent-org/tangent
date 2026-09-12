@@ -18,7 +18,7 @@ const SYMBOLS: Readonly<Record<string, string>> = {
 	mu: "μ",
 	nu: "ν",
 	xi: "ξ",
-	pi: "π",
+	tangent: "π",
 	varpi: "ϖ",
 	rho: "ρ",
 	varrho: "ϱ",

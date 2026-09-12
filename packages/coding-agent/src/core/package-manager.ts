@@ -360,7 +360,7 @@ function collectFiles(
 	return files;
 }
 
-type SkillDiscoveryMode = "pi" | "agents";
+type SkillDiscoveryMode = "tangent" | "agents";
 
 function collectSkillEntries(
 	dir: string,
@@ -423,7 +423,7 @@ function collectSkillEntries(
 				isFile &&
 				entry.name.endsWith(".md") &&
 				!ig.ignores(relPath) &&
-				((mode === "pi" && dir === root) || (mode === "agents" && dir !== root));
+				((mode === "tangent" && dir === root) || (mode === "agents" && dir !== root));
 			if (shouldIncludeMarkdownFile) {
 				entries.push(fullPath);
 				continue;
@@ -644,7 +644,7 @@ function collectAutoExtensionEntries(dir: string): string[] {
  */
 function collectResourceFiles(dir: string, resourceType: ResourceType): string[] {
 	if (resourceType === "skills") {
-		return collectSkillEntries(dir, "pi");
+		return collectSkillEntries(dir, "tangent");
 	}
 	if (resourceType === "extensions") {
 		return collectAutoExtensionEntries(dir);
@@ -1784,10 +1784,10 @@ export class DefaultPackageManager implements PackageManager {
 
 	private getNpmInstallArgs(specs: string[], installRoot: string): string[] {
 		const packageManagerName = this.getPackageManagerName();
-		// Extension packages run inside pi and resolve pi APIs through loader aliases/virtual modules.
+		// Extension packages run inside tangent and resolve tangent APIs through loader aliases/virtual modules.
 		// Disable peer dependency resolution for managed installs (npm's --legacy-peer-deps, and
 		// equivalent bun/pnpm settings) so package managers do not install or solve host-provided
-		// @earendil-works/pi-* peers. Stale auto-installed pi peers can otherwise block updates.
+		// @tangent-ai/tangent-* peers. Stale auto-installed tangent peers can otherwise block updates.
 		if (packageManagerName === "bun") {
 			return ["install", ...specs, "--cwd", installRoot, "--omit=peer"];
 		}
@@ -2427,7 +2427,7 @@ export class DefaultPackageManager implements PackageManager {
 			// Project skills from .pi/
 			addResources(
 				"skills",
-				collectAutoSkillEntries(projectDirs.skills, "pi"),
+				collectAutoSkillEntries(projectDirs.skills, "tangent"),
 				projectMetadata,
 				projectOverrides.skills,
 				projectBaseDir,
@@ -2467,7 +2467,7 @@ export class DefaultPackageManager implements PackageManager {
 			);
 		}
 
-		// User extensions from ~/.pi/agent/
+		// User extensions from ~/.tangent/agent/
 		addResources(
 			"extensions",
 			collectAutoExtensionEntries(userDirs.extensions),
@@ -2476,10 +2476,10 @@ export class DefaultPackageManager implements PackageManager {
 			globalBaseDir,
 		);
 
-		// User skills from ~/.pi/agent/
+		// User skills from ~/.tangent/agent/
 		addResources(
 			"skills",
-			collectAutoSkillEntries(userDirs.skills, "pi"),
+			collectAutoSkillEntries(userDirs.skills, "tangent"),
 			userMetadata,
 			userOverrides.skills,
 			globalBaseDir,

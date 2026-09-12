@@ -1,6 +1,6 @@
 # pico
 
-Durable agent harness for pi: one session file, any number of conversations, every piece of work
+Durable agent harness for tangent: one session file, any number of conversations, every piece of work
 recorded as a task that survives a crash, and a view any UI can render.
 
 **Note**: this guide is about using the harness. `pico-v3.md` is the design and the reference for
@@ -97,7 +97,7 @@ code, a private typed invocation identity. It is not model context. No casts or 
 are needed. Pure accessors, synchronous registrations and methods inside a transaction take no Call.
 
 ```typescript
-import type { Call } from '@earendil-works/pi-agent';
+import type { Call } from '@tangent-ai/tangent-agent';
 import { BACKGROUND_CONTEXT, withCancel } from '@earendil-works/chord/context';
 
 const call: Call = BACKGROUND_CONTEXT; // host call, without cancellation
@@ -121,17 +121,17 @@ something a facade or type can prevent.
 ## Installation
 
 ```bash
-npm install @earendil-works/pi-agent
+npm install @tangent-ai/tangent-agent
 ```
 
 ## Quick Start
 
 ```typescript
-import { Harness, JsonlStorage, systemSections, type Call } from '@earendil-works/pi-agent';
+import { Harness, JsonlStorage, systemSections, type Call } from '@tangent-ai/tangent-agent';
 import { BACKGROUND_CONTEXT } from '@earendil-works/chord/context';
-import { readTool, writeTool, bashTool } from '@earendil-works/pi-agent/tools';
-import { generationKind } from '@earendil-works/pi-agent/kinds';
-import { builtinModels } from '@earendil-works/pi-ai/providers/all';
+import { readTool, writeTool, bashTool } from '@tangent-ai/tangent-agent/tools';
+import { generationKind } from '@tangent-ai/tangent-agent/kinds';
+import { builtinModels } from '@tangent-ai/tangent-ai/providers/all';
 
 const call: Call = BACKGROUND_CONTEXT;
 
@@ -223,7 +223,7 @@ A replacement is usually a wrapper that delegates to the original for everything
 change:
 
 ```typescript
-import { generationKind } from '@earendil-works/pi-agent/kinds';
+import { generationKind } from '@tangent-ai/tangent-agent/kinds';
 const h = await Harness.open(storage, { models, tools, replace: {
   generation: { ...generationKind, async execute(task, runtime, call) { await audit(task); return generationKind.execute(task, runtime, call); } },
 }}, call);
@@ -286,11 +286,11 @@ is the only place the address is spelled:
 ```typescript
 generationKind.config
 // {
-//   model:         conversationValue<ModelRef>('pi.model', { rewind: true }),
-//   thinking:      conversationValue<ThinkingLevel>('pi.thinking', { rewind: true }),
-//   selectedTools: conversationValue<string[]>('pi.tools.selected', { rewind: true }),
-//   profile:       conversationValue<string>('pi.prompt.profile', { rewind: true }),
-//   budgetMs:      conversationValue<number>('pi.tool.budget', { rewind: false }),
+//   model:         conversationValue<ModelRef>('tangent.model', { rewind: true }),
+//   thinking:      conversationValue<ThinkingLevel>('tangent.thinking', { rewind: true }),
+//   selectedTools: conversationValue<string[]>('tangent.tools.selected', { rewind: true }),
+//   profile:       conversationValue<string>('tangent.prompt.profile', { rewind: true }),
+//   budgetMs:      conversationValue<number>('tangent.tool.budget', { rewind: false }),
 // }
 ```
 
@@ -340,8 +340,8 @@ renderer functions are not stored. Section JSON payloads and final rendered text
 missing plugin cannot make historical requests depend on its renderer.
 
 The target pi-ai system-message API and messages-only adapter behavior are integration prerequisites
-([#9116](https://github.com/earendil-works/pi/pull/9116), with coding-agent integration in
-[#9117](https://github.com/earendil-works/pi/pull/9117)). They were open when reviewed; this guide describes
+([#9116](https://github.com/earendil-works/tangent/pull/9116), with coding-agent integration in
+[#9117](https://github.com/earendil-works/tangent/pull/9117)). They were open when reviewed; this guide describes
 the intended contract, not a claim that those PRs already implement the agreed adapter behavior.
 
 ### Answering the Hook
@@ -466,14 +466,14 @@ Stored baseline:
 const baseline: SystemEntry = {
   id: 110, conversationId: 1, kind: 'system',
   data: { baseline: true, sections: [
-    { key: 'pi.identity', action: 'set',
+    { key: 'tangent.identity', action: 'set',
       value: 'You are a coding assistant.', rendered: 'You are a coding assistant.' },
     { key: 'myplugin.rules', action: 'set',
       value: ['Run relevant tests.'], rendered: '- Run relevant tests.' },
   ] },
   model: [{
     role: 'system',
-    content: '## pi.identity\nYou are a coding assistant.\n\n' +
+    content: '## tangent.identity\nYou are a coding assistant.\n\n' +
       '## myplugin.rules\n- Run relevant tests.',
     toolsAdded: [readDefinition, writeDefinition], timestamp: 1000,
   }],
@@ -627,7 +627,7 @@ const answer = await c.prompt({ input: 'Inspect the parser' }, call);
 // AssistantEntry | undefined (the run ended without an answer)
 ```
 
-The pieces are available separately. `inputId` is always the id of the accepted `pi.inbox` list
+The pieces are available separately. `inputId` is always the id of the accepted `tangent.inbox` list
 element, even when idle acceptance places and removes it in the same commit. Generation and
 `post_tools` carry input ids explicitly, so result lookup never scans the transcript:
 
@@ -1019,7 +1019,7 @@ scope (session or conversation), the rewind policy and the payload type.
 const planMode = conversationValue<boolean>('plan.mode', { rewind: true });
 const moves    = conversationList<Move>('game.moves', { rewind: true });
 const expanded = conversationValue<boolean>('ui.expanded', { rewind: false });
-const name     = sessionValue<string>('pi.session.name');
+const name     = sessionValue<string>('tangent.session.name');
 
 await c.value(planMode).set(true, call);
 const on = await c.value(planMode).get(call);
@@ -1096,7 +1096,7 @@ to the UI as it happens, is bounded once in one place, and settles into a `ToolO
 the transcript, the model and every renderer share. Failure is a throw; the harness sets `isError`.
 
 ```typescript
-import { Type, type Tool } from '@earendil-works/pi-agent';
+import { Type, type Tool } from '@tangent-ai/tangent-agent';
 
 export const countLinesTool: Tool<{ i: string; path: string; pattern?: string }, { lines: number; matching: number }> = {
   name: 'count_lines',

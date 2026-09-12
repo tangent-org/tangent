@@ -1,4 +1,4 @@
-> pi can create skills. Ask it to build one for your use case.
+> tangent can create skills. Ask it to build one for your use case.
 
 # Skills
 
@@ -24,17 +24,17 @@ Pi implements the [Agent Skills standard](https://agentskills.io/specification),
 Pi loads skills from:
 
 - Global:
-  - `~/.pi/agent/skills/`
+  - `~/.tangent/agent/skills/`
   - `~/.agents/skills/`
 - Project (only after the project is trusted):
   - `.pi/skills/`
   - `.agents/skills/` in `cwd` and ancestor directories (up to git repo root, or filesystem root when not in a repo)
-- Packages: `skills/` directories or `pi.skills` entries in `package.json`
+- Packages: `skills/` directories or `tangent.skills` entries in `package.json`
 - Settings: `skills` array with files or directories
 - CLI: `--skill <path>` (repeatable, additive even with `--no-skills`)
 
 Discovery rules:
-- In `~/.pi/agent/skills/` and `.pi/skills/`, direct root `.md` files are discovered as individual skills when they have valid skill frontmatter with a non-empty `description`
+- In `~/.tangent/agent/skills/` and `.pi/skills/`, direct root `.md` files are discovered as individual skills when they have valid skill frontmatter with a non-empty `description`
 - In all skill locations, directories containing `SKILL.md` are discovered recursively
 - In `~/.agents/skills/` and project `.agents/skills/`, root `.md` files are ignored, but nested `.md` files in grouping folders are discovered when they declare skill frontmatter
 - Root Markdown files other than `SKILL.md` that do not look like skills are ignored silently
@@ -54,7 +54,7 @@ To use skills from Claude Code or OpenAI Codex, add their directories to setting
 }
 ```
 
-For project-level Claude Code skills, add to `.pi/settings.json`:
+For project-level Claude Code skills, add to `.tangent/settings.json`:
 
 ```json
 {
@@ -64,7 +64,7 @@ For project-level Claude Code skills, add to `.pi/settings.json`:
 
 ## How Skills Work
 
-1. At startup, pi scans skill locations and extracts names and descriptions
+1. At startup, tangent scans skill locations and extracts names and descriptions
 2. The system prompt includes available skills in XML format per the [specification](https://agentskills.io/integrate-skills)
 3. When a task matches, the agent uses `read`, or `bash` when `read` is unavailable, to load the full SKILL.md (models don't always do this; use prompting or `/skill:name` to force it)
 4. The agent follows the instructions, using relative paths to reference scripts and assets

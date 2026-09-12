@@ -3,7 +3,7 @@
 This document specifies durable partial assistant messages for ordinary assistant generation and deferred-response polling. It builds on:
 
 - bound typed value/list addresses from `values.md`;
-- `AssistantMessageFrame`, `AssistantMessageFrameEncoder`, and `reduceAssistantMessageFrames()` from `@earendil-works/pi-ai`;
+- `AssistantMessageFrame`, `AssistantMessageFrameEncoder`, and `reduceAssistantMessageFrames()` from `@tangent-ai/tangent-ai`;
 - the assistant intent/effect/settlement state machine in `harness.md`.
 
 The design persists compact replayable stream frames without making them operation-state authority and without storing a growing full partial message on every update.
@@ -37,7 +37,7 @@ export const pendingAssistantFrames = (
   operationId: string,
   responseEntryId: string,
 ) => list<AssistantMessageFrame>(
-  "pi.pending.assistant_frame",
+  "tangent.pending.assistant_frame",
   `${operationId}:${responseEntryId}`,
 );
 ```
@@ -257,7 +257,7 @@ Authorized external finalization deletes the operation-owned frame-list address 
 
 Normal/synthetic response settlement should already delete its exact frame address. The operation terminal transaction also defensively constructs and deletes the current operation-owned frame address when state is assistant/deferred `effect_pending`.
 
-Idle forks never copy lists in the `pi.pending.assistant_frame` address family. Precise rewrites and migrations page frame lists and preserve element sequences when retaining them.
+Idle forks never copy lists in the `tangent.pending.assistant_frame` address family. Precise rewrites and migrations page frame lists and preserve element sequences when retaining them.
 
 A migration changing `AssistantMessageFrame` shape must map every surviving element or explicitly delete the whole list and leave `effect_pending` recovery with no partial. It must never infer completion from legacy frames.
 

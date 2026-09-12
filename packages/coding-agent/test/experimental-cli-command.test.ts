@@ -42,9 +42,9 @@ describe("experimental CLI commands", () => {
 	});
 
 	test("parses client transport addresses", () => {
-		expect(cli.parse(["client", "--connect", "unix:///tmp/pi.sock"])).toEqual({
+		expect(cli.parse(["client", "--connect", "unix:///tmp/tangent.sock"])).toEqual({
 			ok: true,
-			command: { command: "client", connect: { transport: "unix", path: "/tmp/pi.sock" } },
+			command: { command: "client", connect: { transport: "unix", path: "/tmp/tangent.sock" } },
 		});
 		expect(
 			cli.parse(["client", "--connect", "radius://00000000-0000-4000-8000-000000000001", "--session-id", "demo-1"]),
@@ -112,13 +112,13 @@ describe("experimental CLI commands", () => {
 	});
 
 	test.each([
-		[["client", "--listen", "unix:///tmp/pi.sock"], UNSUPPORTED_CLIENT_OPTIONS],
-		[["server", "--listen", "unix:///tmp/pi.sock"], UNSUPPORTED_SERVER_OPTIONS],
-		[["server", "--connect", "unix:///tmp/pi.sock"], UNSUPPORTED_SERVER_OPTIONS],
+		[["client", "--listen", "unix:///tmp/tangent.sock"], UNSUPPORTED_CLIENT_OPTIONS],
+		[["server", "--listen", "unix:///tmp/tangent.sock"], UNSUPPORTED_SERVER_OPTIONS],
+		[["server", "--connect", "unix:///tmp/tangent.sock"], UNSUPPORTED_SERVER_OPTIONS],
 		[["client", "--connect", "ws://localhost:8080"], 'Unsupported --connect transport "ws:"'],
 		[["client", "--connect", "radius://not-a-server"], "Radius transport address requires"],
 		[["client", "--connect", "unix://relative.sock"], "Unix transport address must not include an authority"],
-		[["client", "--connect", "unix:///tmp/pi.sock?wrong=value"], "Invalid --connect address"],
+		[["client", "--connect", "unix:///tmp/tangent.sock?wrong=value"], "Invalid --connect address"],
 		[["client", "--provider", "anthropic"], "--provider requires --model"],
 		[["client", "-c", "-r"], "--session-id, --continue, and --resume are mutually exclusive"],
 		[["client", "--continue=true"], "--continue does not take a value"],

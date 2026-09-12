@@ -1,7 +1,7 @@
 import { type Context, defineFacet, type Facet, type MutableReplicatedState } from "@earendil-works/chord";
 import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import type { AgentLane, ThinkingLevel } from "@earendil-works/pi-agent-core";
-import { getSupportedThinkingLevels } from "@earendil-works/pi-ai";
+import type { AgentLane, ThinkingLevel } from "@tangent-ai/tangent-agent-core";
+import { getSupportedThinkingLevels } from "@tangent-ai/tangent-ai";
 import type { ModelRuntime } from "../../core/model-runtime.ts";
 import type { SettingsManager } from "../../core/settings-manager.ts";
 import { Models, type Models as ModelsService, type ModelsState } from "./models.ts";
@@ -121,7 +121,7 @@ export function createModelsServiceFacet(options: {
 	readonly settingsManager?: SettingsManager;
 }): Facet {
 	return defineFacet({
-		id: "@pi/models",
+		id: "@tangent/models",
 		setup(env) {
 			const runtime = createModelsService(
 				options.lane,

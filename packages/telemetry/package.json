@@ -1,7 +1,7 @@
 {
-	"name": "@earendil-works/pi-telemetry",
+	"name": "@tangent-ai/tangent-telemetry",
 	"version": "0.85.1",
-	"description": "Vendor-neutral telemetry contracts and typed schema utilities for pi",
+	"description": "Vendor-neutral telemetry contracts and typed schema utilities for tangent",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -34,7 +34,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/earendil-works/pi.git",
+		"url": "git+https://github.com/earendil-works/tangent.git",
 		"directory": "packages/telemetry"
 	},
 	"engines": {

@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
-import { BACKGROUND_CONTEXT, type LaneWatchEvent } from "@earendil-works/pi-agent-core";
-import type { AssistantMessage } from "@earendil-works/pi-ai";
+import { BACKGROUND_CONTEXT, type LaneWatchEvent } from "@tangent-ai/tangent-agent-core";
+import type { AssistantMessage } from "@tangent-ai/tangent-ai";
 import type { ClientCommand } from "../cli/experimental/commands/client.ts";
 import { activateBuiltinClientServices, openClientRuntime } from "./client-runtime.ts";
 import type { AgentOperationResponse } from "./services/agent-controller.ts";
@@ -15,7 +15,7 @@ export type ClientResult =
 	| { readonly kind: "prompted"; readonly serverId: string; readonly sessionId: string; readonly text: string };
 
 export interface RunClientOptions {
-	/** Directory searched when --connect is omitted. Defaults to PI_SERVER_DIR or ~/.pi/server. */
+	/** Directory searched when --connect is omitted. Defaults to TANGENT_SERVER_DIR or ~/.tangent/server. */
 	readonly directory?: string;
 	/** Receives snapshot-ordered main-lane events while a prompt is active. */
 	readonly onEvent?: (event: LaneWatchEvent) => void | Promise<void>;

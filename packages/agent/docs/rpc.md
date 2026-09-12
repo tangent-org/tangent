@@ -162,8 +162,8 @@ interface SessionManagement {
 	detach(context: Context): Promise<void>;
 }
 
-const SessionDirectory = defineService<SessionDirectory>("pi.session-directory");
-const SessionManagement = defineService<SessionManagement>("pi.session-management");
+const SessionDirectory = defineService<SessionDirectory>("tangent.session-directory");
+const SessionManagement = defineService<SessionManagement>("tangent.session-management");
 ```
 
 A server facet derives the client from an authenticated `Context`, authorizes the requested Session, and performs the binding transition:

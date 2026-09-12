@@ -11,7 +11,7 @@ import type {
 	ModelsSimpleStreamOptions,
 	Provider,
 	ProviderHeaders,
-} from "@earendil-works/pi-ai";
+} from "@tangent-ai/tangent-ai";
 import type { ModelRuntime } from "./model-runtime.ts";
 import type { AuthStatus, ProviderConfigInput } from "./provider-composer.ts";
 

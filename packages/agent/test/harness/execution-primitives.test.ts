@@ -1,4 +1,4 @@
-import { fauxProvider } from "@earendil-works/pi-ai";
+import { fauxProvider } from "@tangent-ai/tangent-ai";
 import { describe, expect, it, vi } from "vitest";
 import {
 	BACKGROUND_CONTEXT,
@@ -184,7 +184,7 @@ describe("HookRegistry", () => {
 		expect(receivedValue).toBe("preserved");
 		const spans = telemetry.getSpans();
 		const invocationSpan = spans.find((span) => span.name === "invocation");
-		const hookSpan = spans.find((span) => span.name === "pi.harness.hook");
+		const hookSpan = spans.find((span) => span.name === "tangent.harness.hook");
 		const handlerSpan = spans.find((span) => span.name === "handler.child");
 		expect(hookSpan?.parentId).toBe(invocationSpan?.id);
 		expect(handlerSpan?.parentId).toBe(hookSpan?.id);

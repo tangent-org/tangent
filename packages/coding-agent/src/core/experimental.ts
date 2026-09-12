@@ -1,3 +1,3 @@
 export function areExperimentalFeaturesEnabled(): boolean {
-	return process.env.PI_EXPERIMENTAL === "1";
+	return process.env.TANGENT_EXPERIMENTAL === "1";
 }

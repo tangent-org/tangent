@@ -43,7 +43,7 @@ reports and coordinate disclosure as appropriate.
 
 Security issues in the distributed packages, command-line tools, APIs, and
 repository code are in scope as well as earendil operated infrastructure
-on `pi.dev`.
+on `tangent.dev`.
 
 ## Out Of Scope
 
@@ -57,8 +57,8 @@ on `pi.dev`.
 - Exposed secrets that are third-party/user-controlled credentials
 - Reports requiring the ability to create, modify, delete, or replace files,
   directories, symlinks, environment variables, shell configuration, or other
-  user-controlled local state on the target machine. This includes `~/.pi`,
-  `~/.pi/agent/models.json`, workspace files, `AGENTS.md`, skills, extensions,
+  user-controlled local state on the target machine. This includes `~/.tangent`,
+  `~/.tangent/agent/models.json`, workspace files, `AGENTS.md`, skills, extensions,
   extension configuration, dotfiles, and files synchronized through NFS, roaming
   profiles, or dotfile managers, unless the report shows how Pi itself grants
   that access.

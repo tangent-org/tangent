@@ -1,7 +1,7 @@
 {
-	"name": "@earendil-works/pi-client",
+	"name": "@tangent-ai/tangent-client",
 	"version": "0.85.1",
-	"description": "Transport-neutral client for remote pi sessions over framed CBOR bytes",
+	"description": "Transport-neutral client for remote tangent sessions over framed CBOR bytes",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -30,7 +30,7 @@
 		"prepublishOnly": "npm run clean && npm run build"
 	},
 	"keywords": [
-		"pi",
+		"tangent",
 		"client",
 		"protocol",
 		"cbor",
@@ -40,7 +40,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/earendil-works/pi.git",
+		"url": "git+https://github.com/earendil-works/tangent.git",
 		"directory": "packages/client"
 	},
 	"engines": {
@@ -48,7 +48,7 @@
 	},
 	"dependencies": {
 		"@earendil-works/chord": "^0.85.1",
-		"@earendil-works/pi-protocol": "^0.85.1"
+		"@tangent-ai/tangent-protocol": "^0.85.1"
 	},
 	"devDependencies": {
 		"shx": "0.4.0",

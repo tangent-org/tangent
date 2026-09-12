@@ -6,7 +6,7 @@ import {
 	fauxToolCall,
 	type MutableModels,
 	type Provider,
-} from "@earendil-works/pi-ai";
+} from "@tangent-ai/tangent-ai";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createModels } from "../../../../ai/src/models.ts";
 import type { HarnessEvent, WatchHandle } from "../../../src/harness/agent-harness.ts";
@@ -536,7 +536,7 @@ describe("runtime deferred polling", () => {
 					(write) =>
 						write.kind === "list" &&
 						write.op === "delete" &&
-						write.namespace === "pi.pending.assistant_frame" &&
+						write.namespace === "tangent.pending.assistant_frame" &&
 						write.key.endsWith(unknown.responseEntryId),
 				),
 			);
@@ -545,7 +545,7 @@ describe("runtime deferred polling", () => {
 			"value:set",
 		]);
 		const intentState = intent?.find(
-			(write) => write.kind === "value" && write.op === "set" && write.namespace === "pi.op.state",
+			(write) => write.kind === "value" && write.op === "set" && write.namespace === "tangent.op.state",
 		);
 		expect(intentState).toMatchObject({
 			value: {
@@ -596,11 +596,11 @@ describe("runtime deferred polling", () => {
 						: write.kind,
 				),
 		).toEqual([
-			"value:delete:pi.op.meta",
-			"value:delete:pi.op.state",
-			"list:delete:pi.pending.assistant_frame",
-			"value:set:pi.result",
-			"value:set:pi.lane.state",
+			"value:delete:tangent.op.meta",
+			"value:delete:tangent.op.state",
+			"list:delete:tangent.pending.assistant_frame",
+			"value:set:tangent.result",
+			"value:set:tangent.lane.state",
 		]);
 		expect(
 			fixture.storage

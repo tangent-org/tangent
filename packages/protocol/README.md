@@ -1,4 +1,4 @@
-# @earendil-works/pi-protocol
+# @tangent-ai/tangent-protocol
 
 Runtime-neutral routed envelopes, CBOR encoding, and byte-stream framing for the experimental Pi protocol.
 
@@ -26,7 +26,7 @@ import {
   encodeClientMessage,
   ServerMessageDecoder,
   type ClientHello,
-} from "@earendil-works/pi-protocol";
+} from "@tangent-ai/tangent-protocol";
 
 const hello: ClientHello = { type: "hello", version: PROTOCOL_VERSION };
 transport.send(encodeClientMessage(hello));

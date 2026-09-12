@@ -14,7 +14,7 @@ import type {
 	AgentToolUpdateCallback,
 	ThinkingLevel,
 	ToolExecutionMode,
-} from "@earendil-works/pi-agent-core";
+} from "@tangent-ai/tangent-agent-core";
 import type {
 	Api,
 	AssistantMessageEvent,
@@ -32,7 +32,7 @@ import type {
 	TextContent,
 	ToolResultMessage,
 	Usage,
-} from "@earendil-works/pi-ai";
+} from "@tangent-ai/tangent-ai";
 import type {
 	AutocompleteItem,
 	AutocompleteProvider,
@@ -43,7 +43,7 @@ import type {
 	OverlayHandle,
 	OverlayOptions,
 	TUI,
-} from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-tui";
 import type { Static, TSchema } from "typebox";
 import type { Theme } from "../../modes/interactive/theme/theme.ts";
 import type { BashResult } from "../bash-executor.ts";
@@ -235,12 +235,12 @@ export interface ExtensionUIContext {
 	 * - `keybindings`: KeybindingsManager for app-level keybindings
 	 *
 	 * For full app keybinding support (escape, ctrl+d, model switching, etc.),
-	 * extend `CustomEditor` from `@earendil-works/pi-coding-agent` and call
+	 * extend `CustomEditor` from `@tangent-ai/tangent-coding-agent` and call
 	 * `super.handleInput(data)` for keys you don't handle.
 	 *
 	 * @example
 	 * ```ts
-	 * import { CustomEditor } from "@earendil-works/pi-coding-agent";
+	 * import { CustomEditor } from "@tangent-ai/tangent-coding-agent";
 	 *
 	 * class VimEditor extends CustomEditor {
 	 *   private mode: "normal" | "insert" = "insert";
@@ -338,7 +338,7 @@ export interface ExtensionContext {
 	abort(): void;
 	/** Whether there are queued messages waiting */
 	hasPendingMessages(): boolean;
-	/** Gracefully shutdown pi and exit. Available in all contexts. */
+	/** Gracefully shutdown tangent and exit. Available in all contexts. */
 	shutdown(): void;
 	/** Get current context usage for the active model. */
 	getContextUsage(): ContextUsage | undefined;
@@ -1446,7 +1446,7 @@ export interface ExtensionAPI {
 	 *
 	 * @example
 	 * // Register a new provider with custom models
-	 * pi.registerProvider("my-proxy", {
+	 * tangent.registerProvider("my-proxy", {
 	 *   baseUrl: "https://proxy.example.com",
 	 *   apiKey: "$PROXY_API_KEY",
 	 *   api: "anthropic-messages",
@@ -1465,13 +1465,13 @@ export interface ExtensionAPI {
 	 *
 	 * @example
 	 * // Override baseUrl for an existing provider
-	 * pi.registerProvider("anthropic", {
+	 * tangent.registerProvider("anthropic", {
 	 *   baseUrl: "https://proxy.example.com"
 	 * });
 	 *
 	 * @example
 	 * // Register provider with OAuth support
-	 * pi.registerProvider("corporate-ai", {
+	 * tangent.registerProvider("corporate-ai", {
 	 *   baseUrl: "https://ai.corp.com",
 	 *   api: "openai-responses",
 	 *   models: [...],
@@ -1497,7 +1497,7 @@ export interface ExtensionAPI {
 	 * the initial load phase.
 	 *
 	 * @example
-	 * pi.unregisterProvider("my-proxy");
+	 * tangent.unregisterProvider("my-proxy");
 	 */
 	unregisterProvider(name: string): void;
 
@@ -1509,7 +1509,7 @@ export interface ExtensionAPI {
 // Provider Registration Types
 // ============================================================================
 
-/** Configuration for registering a provider via pi.registerProvider(). */
+/** Configuration for registering a provider via tangent.registerProvider(). */
 export interface ProviderConfig {
 	/** Display name for the provider in UI. */
 	name?: string;
@@ -1568,7 +1568,7 @@ export interface ProviderModelConfig {
 	baseUrl?: string;
 	/** Whether the model supports extended thinking. */
 	reasoning: boolean;
-	/** Maps pi thinking levels to provider/model-specific values; null marks a level unsupported. */
+	/** Maps tangent thinking levels to provider/model-specific values; null marks a level unsupported. */
 	thinkingLevelMap?: Model<Api>["thinkingLevelMap"];
 	/** Supported input types. */
 	input: ("text" | "image")[];
@@ -1585,7 +1585,7 @@ export interface ProviderModelConfig {
 }
 
 /** Extension factory function type. Supports both sync and async initialization. */
-export type ExtensionFactory = (pi: ExtensionAPI) => void | Promise<void>;
+export type ExtensionFactory = (tangent: ExtensionAPI) => void | Promise<void>;
 
 export type InlineExtension =
 	| ExtensionFactory
@@ -1690,7 +1690,7 @@ export interface ExtensionRuntimeState {
 }
 
 /**
- * Action implementations for pi.* API methods.
+ * Action implementations for tangent.* API methods.
  * Provided to runner.initialize(), copied into the shared runtime.
  */
 export interface ExtensionActions {

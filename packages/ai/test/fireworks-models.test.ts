@@ -382,7 +382,7 @@ describe("Anthropic-compatible session affinity and tool compat", () => {
 		expect(request.headers["x-session-affinity"]).toBeUndefined();
 	});
 
-	// Regression test for https://github.com/earendil-works/pi/issues/9102
+	// Regression test for https://github.com/earendil-works/tangent/issues/9102
 	it("sends only x-session-id for OpenRouter models", async () => {
 		const request = await captureAnthropicRequest(createOpenRouterModel(), createContext(), {
 			sessionId: "openrouter-session-1",

@@ -9,7 +9,7 @@ import {
 	withContextValue,
 	withoutAbortSignal,
 } from "@earendil-works/chord/context";
-import { NOOP_TELEMETRY_CONTEXT, type TelemetryContext } from "@earendil-works/pi-telemetry";
+import { NOOP_TELEMETRY_CONTEXT, type TelemetryContext } from "@tangent-ai/tangent-telemetry";
 
 export {
 	awaitWithContext,
@@ -24,7 +24,7 @@ export {
 	withoutAbortSignal,
 };
 
-const TELEMETRY_CONTEXT_KEY = createContextKey<TelemetryContext>("pi.telemetryContext");
+const TELEMETRY_CONTEXT_KEY = createContextKey<TelemetryContext>("tangent.telemetryContext");
 
 /** Return the telemetry parent attached to a context, or the shared no-op parent. */
 export function getTelemetryContext(context: Context): TelemetryContext {

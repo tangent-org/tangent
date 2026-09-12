@@ -1,7 +1,7 @@
 /**
  * Subagent Tool - Delegate tasks to specialized agents
  *
- * Spawns a separate `pi` process for each subagent invocation,
+ * Spawns a separate `tangent` process for each subagent invocation,
  * giving it an isolated context window.
  *
  * Supports three modes:
@@ -16,17 +16,17 @@ import { spawn } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { AgentToolResult, ThinkingLevel } from "@earendil-works/pi-agent-core";
-import type { Message } from "@earendil-works/pi-ai";
-import { StringEnum } from "@earendil-works/pi-ai";
+import type { AgentToolResult, ThinkingLevel } from "@tangent-ai/tangent-agent-core";
+import type { Message } from "@tangent-ai/tangent-ai";
+import { StringEnum } from "@tangent-ai/tangent-ai";
 import {
 	CONFIG_DIR_NAME,
 	type ExtensionAPI,
 	getAgentDir,
 	getMarkdownTheme,
 	withFileMutationQueue,
-} from "@earendil-works/pi-coding-agent";
-import { Container, Markdown, Spacer, Text } from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-coding-agent";
+import { Container, Markdown, Spacer, Text } from "@tangent-ai/tangent-tui";
 import { Type } from "typebox";
 import { type AgentConfig, type AgentScope, discoverAgents } from "./agents.ts";
 
@@ -259,7 +259,7 @@ function getPiInvocation(args: string[]): { command: string; args: string[] } {
 		return { command: process.execPath, args };
 	}
 
-	return { command: "pi", args };
+	return { command: "tangent", args };
 }
 
 type OnUpdateCallback = (partial: AgentToolResult<SubagentDetails>) => void;
@@ -468,8 +468,8 @@ const SubagentParams = Type.Object({
 	cwd: Type.Optional(Type.String({ description: "Working directory for the agent process (single mode)" })),
 });
 
-export default function (pi: ExtensionAPI) {
-	pi.registerTool({
+export default function (tangent: ExtensionAPI) {
+	tangent.registerTool({
 		name: "subagent",
 		label: "Subagent",
 		description: [

@@ -1,6 +1,6 @@
-import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
-import { DEFAULT_MAX_AGENT_RETRY_DELAY_MS, type Model, type Transport } from "@earendil-works/pi-ai";
-import type { TuiMode as RendererTuiMode, ScrollViewScrollbar, TerminalCapabilities } from "@earendil-works/pi-tui";
+import type { ThinkingLevel } from "@tangent-ai/tangent-agent-core";
+import { DEFAULT_MAX_AGENT_RETRY_DELAY_MS, type Model, type Transport } from "@tangent-ai/tangent-ai";
+import type { TuiMode as RendererTuiMode, ScrollViewScrollbar, TerminalCapabilities } from "@tangent-ai/tangent-tui";
 import { randomUUID } from "crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";

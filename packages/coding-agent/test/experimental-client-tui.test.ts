@@ -19,8 +19,8 @@ import {
 	type LaneTranscriptSnapshot,
 	type LaneWatchEvent,
 	reduceLaneSnapshot,
-} from "@earendil-works/pi-agent-core";
-import { ProcessTerminal, TuiMainScreen } from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-agent-core";
+import { ProcessTerminal, TuiMainScreen } from "@tangent-ai/tangent-tui";
 import { beforeAll, describe, expect, test, vi } from "vitest";
 import { type ClientTuiServer, ExperimentalClientTui } from "../src/experimental/client-tui.ts";
 import { createPresentationFacetData } from "../src/experimental/plugins/bundled.ts";
@@ -220,7 +220,7 @@ describe("experimental client TUI", () => {
 			});
 
 			const reloadSource =
-				'"use strict";\nconst { defineFacet, defineService } = require("@earendil-works/chord");\nconst Models = defineService("pi.models");\nmodule.exports = { __esModule: true, default: defineFacet({ id: "test-tui-facet", setup(env) { env.use(Models); } }) };\n';
+				'"use strict";\nconst { defineFacet, defineService } = require("@earendil-works/chord");\nconst Models = defineService("tangent.models");\nmodule.exports = { __esModule: true, default: defineFacet({ id: "test-tui-facet", setup(env) { env.use(Models); } }) };\n';
 			const reloadArtifact: FacetBundleArtifact = {
 				format: FACET_BUNDLE_ARTIFACT_FORMAT,
 				formatVersion: FACET_BUNDLE_ARTIFACT_FORMAT_VERSION,

@@ -463,11 +463,11 @@ External request keys are optional session-scoped values, not alternate internal
 
 ```text
 accept(input, requestId="client-42"), ONE command:
-  read session value (pi.request-input, "client-42")
+  read session value (tangent.request-input, "client-42")
   if present: resolve the existing acceptance
   otherwise:
     create accepted input and its required task/queue changes
-    set session value (pi.request-input, "client-42") = input ID
+    set session value (tangent.request-input, "client-42") = input ID
 
 commit succeeds, reply is lost
   → caller retries "client-42"
@@ -493,7 +493,7 @@ so a historical boundary selects context and rewindable state together.
 | Named working scope | Never rewound or inherited | Until explicit retirement |
 
 ```ts
-const sessionName = sessionValue<string>("pi.session.name");
+const sessionName = sessionValue<string>("tangent.session.name");
 const plan = conversationValue<boolean>("plugin.plan", { rewind: true });
 const expanded = conversationValue<boolean>("ui.expanded", { rewind: false });
 const moves = conversationList<Move>("game.moves", { rewind: true });
@@ -665,8 +665,8 @@ current state; it need not hydrate on every edit.
 
 ```ts
 const work = workingScope(String(taskId));
-const frames = list<Frame>("pi.pending.frames", { scope: work });
-const checkpoint = value<Checkpoint>("pi.pending.checkpoint", { scope: work });
+const frames = list<Frame>("tangent.pending.frames", { scope: work });
+const checkpoint = value<Checkpoint>("tangent.pending.checkpoint", { scope: work });
 ```
 
 ```text

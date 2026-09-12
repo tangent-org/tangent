@@ -159,8 +159,8 @@ describe("openai-codex streaming", () => {
 				expect(headers?.get("Authorization")).toBe(`Bearer ${token}`);
 				expect(headers?.get("chatgpt-account-id")).toBe("acc_test");
 				expect(headers?.get("OpenAI-Beta")).toBe("responses=experimental");
-				expect(headers?.get("originator")).toBe("pi");
-				expect(headers?.get("User-Agent")).toBe(`pi (${platform()} ${release()}; ${arch()})`);
+				expect(headers?.get("originator")).toBe("tangent");
+				expect(headers?.get("User-Agent")).toBe(`tangent (${platform()} ${release()}; ${arch()})`);
 				expect(headers?.get("accept")).toBe("text/event-stream");
 				expect(headers?.has("x-api-key")).toBe(false);
 				return new Response(stream, {
@@ -209,7 +209,7 @@ describe("openai-codex streaming", () => {
 		expect(sawDone).toBe(true);
 	});
 
-	// Regression test for https://github.com/earendil-works/pi/issues/9047
+	// Regression test for https://github.com/earendil-works/tangent/issues/9047
 	it("processes a terminal SSE event without a trailing blank line", async () => {
 		const token = mockToken();
 		const sse = buildSSEPayload({ status: "completed" }).trimEnd();

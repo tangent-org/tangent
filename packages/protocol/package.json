@@ -1,7 +1,7 @@
 {
-	"name": "@earendil-works/pi-protocol",
+	"name": "@tangent-ai/tangent-protocol",
 	"version": "0.85.1",
-	"description": "Transport-neutral CBOR protocol for remote pi sessions",
+	"description": "Transport-neutral CBOR protocol for remote tangent sessions",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -22,7 +22,7 @@
 		"prepublishOnly": "npm run clean && npm run build"
 	},
 	"keywords": [
-		"pi",
+		"tangent",
 		"protocol",
 		"cbor",
 		"binary",
@@ -32,7 +32,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/earendil-works/pi.git",
+		"url": "git+https://github.com/earendil-works/tangent.git",
 		"directory": "packages/protocol"
 	},
 	"engines": {

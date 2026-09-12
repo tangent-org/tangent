@@ -12,8 +12,8 @@ import {
 	type ServiceCatalogueEntry,
 } from "@earendil-works/chord";
 import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import { type Client, createClientServiceTransport } from "@earendil-works/pi-client";
-import type { SessionTarget } from "@earendil-works/pi-protocol";
+import { type Client, createClientServiceTransport } from "@tangent-ai/tangent-client";
+import type { SessionTarget } from "@tangent-ai/tangent-protocol";
 
 export type ServerConnectionState =
 	| { status: "connecting"; attempt: number }

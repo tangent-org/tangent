@@ -90,7 +90,7 @@ providing process; such tokens are never announced and never resolvable remotely
 
 ```ts
 const modelSelectionTui = defineFacet({
-  id: "@pi/model-selection:tui",
+  id: "@tangent/model-selection:tui",
 
   uses:     [Models, Tui],
   provides: [],
@@ -251,7 +251,7 @@ its own token and keeps completeness checkable.
 
 ```ts
 export const questionSession = defineFacet({
-  id: "@pi/question:session",
+  id: "@tangent/question:session",
 
   uses:     [Tools],
   provides: [QuestionDialogs],   // keyed token
@@ -361,13 +361,13 @@ export interface SessionStatusReporting {
   report(status: SessionStatus, context: Context): Promise<void>;
 }
 export const SessionStatusReporting =
-  defineService<SessionStatusReporting>("pi.session-status-reporting");
+  defineService<SessionStatusReporting>("tangent.session-status-reporting");
 
 export interface SessionStatusView {
   readonly state: State<Record<string, SessionStatus>>;
 }
 export const SessionStatusView =
-  defineService<SessionStatusView>("pi.session-status");
+  defineService<SessionStatusView>("tangent.session-status");
 ```
 
 The worker `uses` the reporting token and pushes; the server aggregates into
@@ -433,9 +433,9 @@ Three routes, converging on one attach:
 
 | invocation | route |
 | --- | --- |
-| `pi` (bare, in a directory) | ask server to create a session for cwd |
-| `pi --resume` | invoke the picker command at startup |
-| `pi --session <id>` | attach directly |
+| `tangent` (bare, in a directory) | ask server to create a session for cwd |
+| `tangent --resume` | invoke the picker command at startup |
+| `tangent --session <id>` | attach directly |
 
 `--resume` needs no special machinery: the picker is an ordinary command registered
 by the server-sourced picker facet, and resume invokes it at startup instead of
@@ -494,7 +494,7 @@ framework's tracker (`delta.md`) records intent and emits ops.
 
 ```ts
 // contract.ts
-export const TranscriptState = defineState<TranscriptTail>("pi.transcript.tail");
+export const TranscriptState = defineState<TranscriptTail>("tangent.transcript.tail");
 ```
 
 ```ts
@@ -621,7 +621,7 @@ Provider side:
 
 ```ts
 export const transcriptSession = defineFacet({
-  id: "@pi/transcript:session",
+  id: "@tangent/transcript:session",
   uses: [Agent],
   provides: [Transcript],
   observes: [],
@@ -653,7 +653,7 @@ Consumer side:
 
 ```ts
 export const transcriptTui = defineFacet({
-  id: "@pi/transcript:tui",
+  id: "@tangent/transcript:tui",
   uses: [Transcript, Tui],
   provides: [],
   observes: [],
@@ -710,10 +710,10 @@ Because `watch()` is async, **instance factories may be async**. The instance is
 announced once the factory resolves; `add(key)` returns its closer immediately.
 
 ```ts
-export const Lane = defineKeyedService<LaneView>("pi.lane");   // key = lane name
+export const Lane = defineKeyedService<LaneView>("tangent.lane");   // key = lane name
 
 export const laneSession = defineFacet({
-  id: "@pi/lane:session",
+  id: "@tangent/lane:session",
   uses:     [Harness],
   provides: [Lane],
   observes: [],
@@ -925,21 +925,21 @@ export interface BrowseView {
   readonly note?: string;    // e.g. "Ask the owner for wider access"
 }
 
-export const BrowseState = defineState<BrowseView>("pi.browse.view");
+export const BrowseState = defineState<BrowseView>("tangent.browse.view");
 
 export interface FileBrowsing {
   readonly view: State<BrowseView>;
   list(handle: string, path: string, context: Context): Promise<DirEntry[]>;
 }
 
-export const FileBrowsing = definePeerService<FileBrowsing>("pi.file-browsing");
+export const FileBrowsing = definePeerService<FileBrowsing>("tangent.file-browsing");
 ```
 
 Server facet:
 
 ```ts
 export const fileBrowsingServer = defineFacet({
-  id: "@pi/file-browsing:server",
+  id: "@tangent/file-browsing:server",
 
   uses:     [Fleet],
   provides: [FileBrowsing],
@@ -993,7 +993,7 @@ TUI facet — note that it contains no permission logic at all:
 
 ```ts
 export const fileBrowsingTui = defineFacet({
-  id: "@pi/file-browsing:tui",
+  id: "@tangent/file-browsing:tui",
 
   uses:     [FileBrowsing, Tui],
   provides: [],
@@ -1063,7 +1063,7 @@ Presence is replicated state the host provides:
 
 ```ts
 export const ConnectedPeers =
-  defineService<{ readonly state: State<Record<PeerId, Principal>> }>("pi.peers");
+  defineService<{ readonly state: State<Record<PeerId, Principal>> }>("tangent.peers");
 ```
 
 Server and worker facets read it to enumerate who is attached. A facet needs it
@@ -1106,7 +1106,7 @@ interface TuiHost {
   select<T>(title: string, items: SelectItem<T>[], options: { signal: AbortSignal }): Promise<T | undefined>;
 }
 
-const Tui = defineService<TuiHost>("pi.local.tui", { rpc: false });
+const Tui = defineService<TuiHost>("tangent.local.tui", { rpc: false });
 ```
 
 ### 11.1 Slots
@@ -1234,10 +1234,10 @@ a fresh working copy, so removal is a rebuild rather than an inverse mutation.
 
 ```text
 fresh working copy
-→ built-in providers      (@pi/providers-builtin)
-→ remote catalogue        (@pi/providers-catalog)
-→ models.json transform   (@pi/providers-models-json)
-→ auth/availability mark  (@pi/auth)
+→ built-in providers      (@tangent/providers-builtin)
+→ remote catalogue        (@tangent/providers-catalog)
+→ models.json transform   (@tangent/providers-models-json)
+→ auth/availability mark  (@tangent/auth)
 → validated state
 ```
 
@@ -1663,7 +1663,7 @@ absent from the catalogue and the HTTP router returns `no_such_member`.
 ### 15.1 Declaring a protocol
 
 ```ts
-import { object, array, string, int, oneOf, literal } from "@pi/schema";
+import { object, array, string, int, oneOf, literal } from "@tangent/schema";
 
 export const TranscriptEntry = object({
   id: string(),
@@ -1672,7 +1672,7 @@ export const TranscriptEntry = object({
 });
 export type TranscriptEntry = Static<typeof TranscriptEntry>;
 
-export const TranscriptState = defineState<TranscriptTail>("pi.transcript.tail", {
+export const TranscriptState = defineState<TranscriptTail>("tangent.transcript.tail", {
   schema: object({ entries: array(TranscriptEntry) }),
 });
 
@@ -1682,7 +1682,7 @@ export interface Transcript {
   subscribeRaw(sink: (e: TranscriptEntry) => void): Unsubscribe;
 }
 
-export const Transcript = defineService<Transcript>("pi.transcript", {
+export const Transcript = defineService<Transcript>("tangent.transcript", {
   protocol: {
     methods: { page: { params: object({ before: string(), limit: int() }),
                        result: array(TranscriptEntry) } },
@@ -1701,7 +1701,7 @@ Method parameters are a single object, not positional. Names then survive into t
 TypeScript signature, into the JSON Schema as `properties`, and into the request body,
 and adding an optional field does not change arity.
 
-`@pi/schema` re-exports TypeBox constructors as free functions so declarations stay
+`@tangent/schema` re-exports TypeBox constructors as free functions so declarations stay
 readable. They are functions rather than constants because TypeBox schemas are mutable
 objects and a shared constant would alias into every schema referencing it.
 
@@ -1737,7 +1737,7 @@ session, so a client cannot address another peer's (§10.2).
 ```json
 { "version": "1",
   "services": {
-    "pi.transcript": {
+    "tangent.transcript": {
       "mode": "singleton",
       "methods": { "page": { "params": { "$ref": "#/definitions/PageParams" },
                              "result": { "type": "array",
@@ -1751,7 +1751,7 @@ session, so a client cannot address another peer's (§10.2).
 **Call**
 
 ```
-POST /v1/call/pi.transcript/page
+POST /v1/call/tangent.transcript/page
 { "before": "entry_88", "limit": 50 }
 
 200 { "result": [ { "id": "entry_87", "role": "assistant", "text": "..." } ] }
@@ -1763,7 +1763,7 @@ POST /v1/call/pi.transcript/page
 **State over SSE**
 
 ```
-GET /v1/state/pi.lane/main/snapshot
+GET /v1/state/tangent.lane/main/snapshot
 Accept: text/event-stream
 id: 0
 event: ops

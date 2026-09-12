@@ -1926,7 +1926,7 @@ Please report this to https://github.com/markedjs/marked.`, e) {
     mu: "\u03BC",
     nu: "\u03BD",
     xi: "\u03BE",
-    pi: "\u03C0",
+    tangent: "\u03C0",
     varpi: "\u03D6",
     rho: "\u03C1",
     varrho: "\u03F1",

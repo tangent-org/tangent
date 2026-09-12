@@ -891,7 +891,7 @@ value_delete { conv?, workingScope?, namespace, key }                          /
 list_append  { conv?, workingScope?, namespace, key, value, tag? }
 list_delete  { workingScope?, namespace, key }                                 // session/working lists only
 scope_retire { workingScope }                                                 // MAIN-scope write
-// usage(task, conv, usage) appends to the main session list pi.usage; no special storage verb
+// usage(task, conv, usage) appends to the main session list tangent.usage; no special storage verb
 ```
 `parent.asOf` is a committed parent-history boundary; optional `at` records an entry-based selection.
 Historical forks set `inheritValues: true`. Subagents set it to false and store selected initial
@@ -1091,15 +1091,15 @@ TypeScript type. No registration, declaration merging, runtime token catalog, or
 flag is required. `declareVar` is replaced by these constructors:
 
 ```ts
-const model = conversationValue<ModelIdentity>("pi.model");
-const thinkingLevel = conversationValue<ThinkingLevel>("pi.thinking");
-const activeTools = conversationValue<string[]>("pi.active-tools");
+const model = conversationValue<ModelIdentity>("tangent.model");
+const thinkingLevel = conversationValue<ThinkingLevel>("tangent.thinking");
+const activeTools = conversationValue<string[]>("tangent.active-tools");
 const planMode = conversationValue<boolean>("my-plugin.plan-mode");
 const moves = conversationList<Move>("my-game.moves");
 
-const sessionName = sessionValue<string>("pi.session.name");
-const entryLabel = (id: number) => sessionValue<string>("pi.entry.label", String(id));
-const requestInput = (requestId: string) => sessionValue<number>("pi.request-input", requestId);
+const sessionName = sessionValue<string>("tangent.session.name");
+const entryLabel = (id: number) => sessionValue<string>("tangent.entry.label", String(id));
+const requestInput = (requestId: string) => sessionValue<number>("tangent.request-input", requestId);
 
 await conv.setValue(planMode, true);
 const enabled = await conv.getValue(planMode) ?? false;
@@ -1109,8 +1109,8 @@ await harness.setValue(entryLabel(42), "before migration");
 ```
 
 Namespace must be non-empty; namespace/key cannot contain NUL; the empty key is legal. Equal
-(scope, kind, namespace, key) tuples name the same address within the receiver's scope. `pi` and
-`pi.*` are reserved for core. Constructing the same address with incompatible value types is a
+(scope, kind, namespace, key) tuples name the same address within the receiver's scope. `tangent` and
+`tangent.*` are reserved for core. Constructing the same address with incompatible value types is a
 programming defect, not a reason for a runtime registry. Value types are determined by the address
 (`NoInfer<T>` on writes); wrong scope, wrong kind and wrong value type are compile-time errors.
 Defaults belong in caller code, not token definitions. Stored payloads are JSON values.
@@ -1285,8 +1285,8 @@ object identity does not matter. Retention information is stored, not reconstruc
 
 ```ts
 const work = workingScope(String(taskId));
-const frames = list<AssistantMessageFrame>("pi.pending.frames", "", work);
-const memo = value<JsonValue>("pi.pending.memo", "step", work);
+const frames = list<AssistantMessageFrame>("tangent.pending.frames", "", work);
+const memo = value<JsonValue>("tangent.pending.memo", "step", work);
 
 await harness.command(work, tx => {
   tx.appendList(frames, frame);
@@ -1910,9 +1910,9 @@ await fork.drive();                                    // parent and sibling for
 ### 12.5 Values, child initialization and working state
 
 ```ts
-const model = conversationValue<ModelIdentity>("pi.model");
-const thinking = conversationValue<ThinkingLevel>("pi.thinking");
-const tools = conversationValue<string[]>("pi.active-tools");
+const model = conversationValue<ModelIdentity>("tangent.model");
+const thinking = conversationValue<ThinkingLevel>("tangent.thinking");
+const tools = conversationValue<string[]>("tangent.active-tools");
 const plan = conversationValue<boolean>("my-plugin.plan");
 await root.setValue(plan, true);
 await root.spawn({
@@ -2373,7 +2373,7 @@ An interrupted request with no provider report has unknown cost; no exactly-once
 Reject stale/repeated outcomes instead of appending duplicate usage. Usage is an ordinary main
 session list; no separate ledger authority/file or redundant full usage payload in task patches.
 
-**Telemetry** uses pi's callback `TelemetryContext` (typed schemas, no second contract). Spans and
+**Telemetry** uses tangent's callback `TelemetryContext` (typed schemas, no second contract). Spans and
 their parents follow the procedure nesting:
 ```
 harness.open · harness.drive (per pass)

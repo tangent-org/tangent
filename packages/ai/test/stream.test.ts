@@ -1302,7 +1302,7 @@ describe("Generate E2E Tests", () => {
 	});
 
 	// =========================================================================
-	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
+	// OAuth-based providers (credentials from ~/.tangent/agent/oauth.json)
 	// Tokens are resolved at module level (see oauthTokens above)
 	// =========================================================================
 

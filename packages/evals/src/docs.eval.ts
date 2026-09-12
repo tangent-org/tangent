@@ -1,10 +1,10 @@
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
-import { Type } from "@earendil-works/pi-ai";
-import { defineTool } from "@earendil-works/pi-coding-agent";
+import { Type } from "@tangent-ai/tangent-ai";
+import { defineTool } from "@tangent-ai/tangent-coding-agent";
 import { expect } from "vitest";
 import { describeEval, toolCalls } from "vitest-evals";
-import { createPiCodingAgentHarness } from "./pi-harness.ts";
+import { createTangentCodingAgentHarness } from "./pi-harness.ts";
 
 const SUBMIT_AUDIT_TOOL_NAME = "submit_documentation_audit";
 const submitDocumentationAuditTool = defineTool({
@@ -37,7 +37,7 @@ const documentationPages = globSync("**/*.md", { cwd: docsRoot })
 	.map((path) => path.replaceAll("\\", "/"))
 	.sort()
 	.map((path) => ({ path }));
-const documentationAuditHarness = createPiCodingAgentHarness({
+const documentationAuditHarness = createTangentCodingAgentHarness({
 	name: "documentation-page-audit",
 	tools: ["read", "grep", "find", "ls", SUBMIT_AUDIT_TOOL_NAME],
 	customTools: [submitDocumentationAuditTool],

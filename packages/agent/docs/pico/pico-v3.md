@@ -357,12 +357,12 @@ permission to redo the same external action with new ids.
 
 ### 3.4 Request keys name acceptances
 
-Every accepted input has an `inputId`, the id of its `pi.inbox` list element (§8.1). A caller may
+Every accepted input has an `inputId`, the id of its `tangent.inbox` list element (§8.1). A caller may
 also supply an opaque request id. Acceptance atomically stores a session value from that key to the
 new identity:
 
 ```text
-400  append pi.inbox item                         inputId = 400
+400  append tangent.inbox item                         inputId = 400
 401  inputResult[400] = queued or placed
 402  request["req-42"] = { conversationId, inputId:400 }
 ```
@@ -389,7 +389,7 @@ position (an entry, §3.2) selects context and rewindable state together.
 | Scratch | Never rewound, never inherited | One live execution, until settlement |
 
 ```ts
-const sessionName = sessionValue<string>("pi.session.name");
+const sessionName = sessionValue<string>("tangent.session.name");
 const plan        = conversationValue<boolean>("plugin.plan", { rewind: true });
 const expanded    = conversationValue<boolean>("ui.expanded", { rewind: false });
 const moves       = conversationList<Move>("game.moves", { rewind: true });
@@ -465,7 +465,7 @@ Scratch is a task's working state while it runs: streamed frames, a checkpoint, 
 per task, any number of addresses in it, durable across a restart, gone when the task settles.
 
 ```ts
-import { AssistantMessageFrameEncoder, type AssistantMessageFrame } from "@earendil-works/pi-ai";
+import { AssistantMessageFrameEncoder, type AssistantMessageFrame } from "@tangent-ai/tangent-ai";
 
 const frames     = scratchList<AssistantMessageFrame>("frames");
 const checkpoint = scratchValue<Checkpoint>("checkpoint");
@@ -651,11 +651,11 @@ type ConfigSpec = Record<string, Value<any>>;
 const generationKind = defineTaskKind<GenerationState>()({
   kind: "generation",
   config: {
-    model:         conversationValue<ModelId>("pi.model", { rewind: true }),
-    thinking:      conversationValue<ThinkingLevel>("pi.thinking", { rewind: true }),
-    selectedTools: conversationValue<string[]>("pi.tools.selected", { rewind: true }),
-    profile:       conversationValue<string>("pi.prompt.profile", { rewind: true }),
-    budgetMs:      conversationValue<number>("pi.tool.budget", { rewind: false }),
+    model:         conversationValue<ModelId>("tangent.model", { rewind: true }),
+    thinking:      conversationValue<ThinkingLevel>("tangent.thinking", { rewind: true }),
+    selectedTools: conversationValue<string[]>("tangent.tools.selected", { rewind: true }),
+    profile:       conversationValue<string>("tangent.prompt.profile", { rewind: true }),
+    budgetMs:      conversationValue<number>("tangent.tool.budget", { rewind: false }),
   },
   ...
 });
@@ -1367,7 +1367,7 @@ outside the line, and their decisions are re-validated inside it.
 
 ### 8.1 Accepting input
 
-Queued input is a conversation-scoped sticky list, `pi.inbox`. Its list element id is the stable
+Queued input is a conversation-scoped sticky list, `tangent.inbox`. Its list element id is the stable
 `inputId`; its value carries the complete entry draft, so a UI can render queued text or images
 without another read:
 
@@ -1388,7 +1388,7 @@ type InputResult =
 
 The three modes that ask for a turn carry user content; a `write` carries its own entry kind and
 the same `EntryInput<E>` (§9.2) `Tx.entry` takes, and asks for nothing. `inputResult(id)` denotes the sticky conversation Value address with
-namespace `pi.inputResult` and key `String(id)`, typed as `InputResult`. It is ordinary stored
+namespace `tangent.inputResult` and key `String(id)`, typed as `InputResult`. It is ordinary stored
 state, not a driver callback.
 
 `accept({ input, requestId?, whenBusy? }, call)` is "the user hit enter": when the conversation is
@@ -1483,7 +1483,7 @@ interface SystemSectionDraft {
 
 interface SkillInfo { name: string; description: string }
 const skillsSection = defineSystemSection<SkillInfo[]>({
-  key: "pi.skills",
+  key: "tangent.skills",
   render: skills => skills.map(skill => `- ${skill.name}: ${skill.description}`).join("\n"),
 });
 ```
@@ -1637,8 +1637,8 @@ at their historical positions and adapter-derived bulk wire tool declarations. P
 baseline, flattens historical changes into a rewritten prompt, or sends a parallel top-level tool list.
 Fallback user messages do not have native system priority; cache reuse is best-effort, not universal.
 
-The pi-ai `SystemMessage` shape comes from [PR #9116](https://github.com/earendil-works/pi/pull/9116);
-[PR #9117](https://github.com/earendil-works/pi/pull/9117) covers coding-agent prompt/tool deltas. These
+The pi-ai `SystemMessage` shape comes from [PR #9116](https://github.com/earendil-works/tangent/pull/9116);
+[PR #9117](https://github.com/earendil-works/tangent/pull/9117) covers coding-agent prompt/tool deltas. These
 were open when this contract was reviewed. Messages-only mode and its adapter fixtures are an external
 integration requirement, not a claim that the current main branch already implements them.
 
@@ -1665,9 +1665,9 @@ abort:              fresh invocation after execute/recover returned:
 
 Usage is recorded for failed, deferred and discarded attempts too; a missing report is unknown cost,
 not zero. A report received only after the cancellation cutoff may not have reached scratch and is
-therefore unknown to fresh abort cleanup. The record is a session list, `pi.usage`, one element per
+therefore unknown to fresh abort cleanup. The record is a session list, `tangent.usage`, one element per
 attempt (conversation, task, model, tokens, cost), appended in the settlement commit together with an update of the session
-value `pi.usage.totals`, so stats are a point read and never a fold. Tools and jobs append the same
+value `tangent.usage.totals`, so stats are a point read and never a fold. Tools and jobs append the same
 way through the sink's `usage`. Persistence and invariant failures are not provider errors: they fault the session.
 
 ### 8.3 Tools and post_tools
@@ -2260,7 +2260,7 @@ diagnostics after it, delimited, and stores that message on the result entry:
 ```text
 …last line of the file
 <harness>
-[warn] output truncated: 2,000 of 51,204 lines shown; full output at /tmp/pi/out-4421.log
+[warn] output truncated: 2,000 of 51,204 lines shown; full output at /tmp/tangent/out-4421.log
 </harness>
 ```
 
@@ -2388,7 +2388,7 @@ There is a session-level watch for what isn't one conversation's:
 ```ts
 interface SessionView {
   readonly conversations: readonly Conversation[];
-  readonly values: ReadonlyMap<Address, JsonValue>;     // session-scoped: pi.usage.totals, pi.session.name, ...
+  readonly values: ReadonlyMap<Address, JsonValue>;     // session-scoped: tangent.usage.totals, tangent.session.name, ...
   readonly faulted: boolean;
   readonly readAt: Id;
 }

@@ -18,7 +18,7 @@ import {
 	setKeybindings,
 	Text,
 	type TUI,
-} from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-tui";
 import type { ClientCommand } from "../cli/experimental/commands/client.ts";
 import { getAgentDir } from "../config.ts";
 import { KeybindingsManager } from "../core/keybindings.ts";
@@ -264,7 +264,7 @@ export class ExperimentalClientTui implements Component {
 			return operation;
 		};
 		const presentationBridgeFacet = defineFacet({
-			id: "@pi/presentation-bridge",
+			id: "@tangent/presentation-bridge",
 			setup: (env) => {
 				env.provide(PresentationUI, {
 					select: (title, items, selectedValue) =>

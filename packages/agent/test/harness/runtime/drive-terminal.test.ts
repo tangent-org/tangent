@@ -145,13 +145,13 @@ describe("runtime terminal cleanup mechanics", () => {
 		const writes = await operationCleanupWrites(session, operationId, state, BACKGROUND_CONTEXT);
 
 		expect(writes.map(address)).toEqual([
-			"value:delete:pi.op.meta:run",
-			"value:delete:pi.op.state:run",
-			"value:delete:pi.op.tool_args:run:step:0",
-			"value:delete:pi.op.tool_memo:run:invocation:memo",
-			"value:delete:pi.op.preparation:run:task",
-			"value:delete:pi.pending.tool_output:run:invocation",
-			"list:delete:pi.pending.assistant_frame:run:response",
+			"value:delete:tangent.op.meta:run",
+			"value:delete:tangent.op.state:run",
+			"value:delete:tangent.op.tool_args:run:step:0",
+			"value:delete:tangent.op.tool_memo:run:invocation:memo",
+			"value:delete:tangent.op.preparation:run:task",
+			"value:delete:tangent.pending.tool_output:run:invocation",
+			"list:delete:tangent.pending.assistant_frame:run:response",
 		]);
 		await commit(session, writes);
 		for (const id of ["steer", "follow", "write", "next"]) {
@@ -205,8 +205,8 @@ describe("runtime terminal cleanup mechanics", () => {
 
 		const writes = await operationCleanupWrites(session, operationId, state, BACKGROUND_CONTEXT);
 
-		expect(writes.map(address)).toContain("value:delete:pi.pending.entry:staged");
-		expect(writes.map(address)).not.toContain("value:delete:pi.pending.entry:placed");
+		expect(writes.map(address)).toContain("value:delete:tangent.pending.entry:staged");
+		expect(writes.map(address)).not.toContain("value:delete:tangent.pending.entry:placed");
 	});
 
 	it.each([
@@ -233,12 +233,12 @@ describe("runtime terminal cleanup mechanics", () => {
 		const writes = await operationCleanupWrites(session, operationId, state, BACKGROUND_CONTEXT);
 
 		expect(writes.map(address)).toEqual([
-			`value:delete:pi.op.meta:${operationId}`,
-			`value:delete:pi.op.state:${operationId}`,
-			`value:delete:pi.op.tool_args:${operationId}:step:0`,
-			`value:delete:pi.op.tool_memo:${operationId}:invocation:memo`,
-			`value:delete:pi.op.preparation:${operationId}:task`,
-			`value:delete:pi.pending.tool_output:${operationId}:invocation`,
+			`value:delete:tangent.op.meta:${operationId}`,
+			`value:delete:tangent.op.state:${operationId}`,
+			`value:delete:tangent.op.tool_args:${operationId}:step:0`,
+			`value:delete:tangent.op.tool_memo:${operationId}:invocation:memo`,
+			`value:delete:tangent.op.preparation:${operationId}:task`,
+			`value:delete:tangent.pending.tool_output:${operationId}:invocation`,
 		]);
 	});
 });

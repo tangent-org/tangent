@@ -1,10 +1,10 @@
 import { deepStrictEqual } from "node:assert/strict";
 import { join } from "node:path";
-import type { Api, Model } from "@earendil-works/pi-ai";
-import { ModelRuntime } from "@earendil-works/pi-coding-agent";
+import type { Api, Model } from "@tangent-ai/tangent-ai";
+import { ModelRuntime } from "@tangent-ai/tangent-coding-agent";
 import { describe, expect } from "vitest";
 import { createJudge, describeEval } from "vitest-evals";
-import { createPiCodingAgentHarness, excludePiDocumentation, type PiCodingAgentInput } from "./pi-harness.ts";
+import { createTangentCodingAgentHarness, excludePiDocumentation, type TangentCodingAgentInput } from "./pi-harness.ts";
 import { evalHarnessTable } from "./vitest-evals/harness-table.ts";
 
 const PROVIDER_ID = "openai";
@@ -53,7 +53,7 @@ function errorMessage(error: unknown): string {
 }
 
 function createModelAuthoringHarness(name: string, transformSystemPrompt?: (defaultPrompt: string) => string) {
-	return createPiCodingAgentHarness({
+	return createTangentCodingAgentHarness({
 		name,
 		...(transformSystemPrompt ? { transformSystemPrompt } : {}),
 		output: async ({ session, systemPrompt, agentDir }) => {
@@ -110,7 +110,7 @@ const expectedResult: Exclude<ModelAuthoringResult, { error: string }> = {
 	existingModelsPreserved: true,
 };
 
-const ModelAuthoringJudge = createJudge<PiCodingAgentInput, ModelAuthoringOutput>(
+const ModelAuthoringJudge = createJudge<TangentCodingAgentInput, ModelAuthoringOutput>(
 	"ModelAuthoringJudge",
 	({ output }) => {
 		if ("error" in output.result) {

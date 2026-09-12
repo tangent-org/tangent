@@ -4,9 +4,9 @@
 		"outDir": "./dist",
 		"paths": {
 			"@earendil-works/chord": ["../chord/dist/index.d.ts"],
-			"@earendil-works/pi-telemetry": ["../telemetry/dist/index.d.ts"],
-			"@earendil-works/pi-ai": ["../ai/dist/index.d.ts"],
-			"@earendil-works/pi-ai/*": ["../ai/dist/*.d.ts", "../ai/dist/providers/*.d.ts"]
+			"@tangent-ai/tangent-telemetry": ["../telemetry/dist/index.d.ts"],
+			"@tangent-ai/tangent-ai": ["../ai/dist/index.d.ts"],
+			"@tangent-ai/tangent-ai/*": ["../ai/dist/*.d.ts", "../ai/dist/providers/*.d.ts"]
 		},
 		"rootDir": "./src"
 	},

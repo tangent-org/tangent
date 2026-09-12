@@ -394,7 +394,7 @@ A Branch exists exactly when its required tip value exists. `createBranch(name, 
 
 Use Branch terminology in source. This package renames the typed constructor and public concepts to `branchTip`/`tipId`. The persisted namespace and durable field spelling decision must be consistent across all backends and docs:
 
-- use `pi.branch.tip` and rename format-4 fields from leaf to tip rather than retain misleading new-code aliases;
+- use `tangent.branch.tip` and rename format-4 fields from leaf to tip rather than retain misleading new-code aliases;
 - format 4 and the new harness are WIP, so replace their schema and field names in place: no storage-version bump, migration, compatibility decoder, or old-format rejection path;
 - legacy coding-agent v3 import remains supported: it maps its selected main leaf to a main Branch tip and walks that selected physical ancestry to reconstruct the nearest `model_change`, `thinking_level_change`, and `active_tools_change` independently; unsupported nearest values do not fall back to older history;
 - when the importer can reconstruct a total configuration, it writes ordinary `laneConfig("main")` plus fresh idle `laneState("main")` before returning the Session; missing active-tools history normalizes to `[]` because v3 did not persist the initial tool inventory;

@@ -2,14 +2,14 @@
  * Model resolution, scoping, and initial selection
  */
 
-import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
+import type { ThinkingLevel } from "@tangent-ai/tangent-agent-core";
 import {
 	type Api,
 	type AuthOperationOptions,
 	type KnownProvider,
 	type Model,
 	modelsAreEqual,
-} from "@earendil-works/pi-ai";
+} from "@tangent-ai/tangent-ai";
 import chalk from "chalk";
 import { minimatch } from "minimatch";
 import { isValidThinkingLevel } from "../cli/args.ts";

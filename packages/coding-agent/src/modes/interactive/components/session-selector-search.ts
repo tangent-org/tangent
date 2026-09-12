@@ -1,4 +1,4 @@
-import { fuzzyMatch } from "@earendil-works/pi-tui";
+import { fuzzyMatch } from "@tangent-ai/tangent-tui";
 import type { SessionInfo } from "../../../core/session-manager.ts";
 
 export type SortMode = "threaded" | "recent" | "relevance";

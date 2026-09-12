@@ -12,7 +12,7 @@ Provider API-key variables are documented separately in [Providers](providers.md
 
 The CLI and RPC entry points set two process markers:
 
-- `AI_AGENT=pi` is a generic marker that lets tooling identify Pi as the agent that launched the process.
+- `AI_AGENT=tangent` is a generic marker that lets tooling identify Pi as the agent that launched the process.
 - `PI_CODING_AGENT=true` is Pi-specific and lets child processes detect that they run inside Pi.
 
 Child processes inherit both markers. They are not session-specific and are not set automatically when Pi is embedded through the SDK.
@@ -78,11 +78,11 @@ These variables are read by Pi itself:
 
 | Variable | Description |
 |----------|-------------|
-| `PI_CODING_AGENT_DIR` | Override the config directory; default is `~/.pi/agent` |
+| `PI_CODING_AGENT_DIR` | Override the config directory; default is `~/.tangent/agent` |
 | `PI_CODING_AGENT_SESSION_DIR` | Override session storage; overridden by `--session-dir` |
 | `PI_PACKAGE_DIR` | Override the package directory, useful for Nix/Guix store paths |
 | `PI_OFFLINE` | Disable startup network operations, including update checks, package updates, and install/update telemetry |
-| `PI_SKIP_VERSION_CHECK` | Disable the `pi.dev` latest-version request |
+| `PI_SKIP_VERSION_CHECK` | Disable the `tangent.dev` latest-version request |
 | `PI_TELEMETRY` | Override install/update telemetry and provider attribution headers: `1`/`true`/`yes` or `0`/`false`/`no` |
 | `PI_CACHE_RETENTION` | Set to `long` for extended provider prompt caching where supported |
 | `PI_SHARE_VIEWER_URL` | Override the base URL used by `/share` |
@@ -96,4 +96,4 @@ These variables are read by Pi itself:
 
 Provider credentials such as `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, and cloud-provider configuration are listed in [Providers](providers.md#environment-variables-or-auth-file).
 
-`PI_SERVER_DIR` and `PI_SERVER_ID` apply only to the source-only [experimental remote harness](development.md#experimental-remote-harness), not distributed builds.
+`TANGENT_SERVER_DIR` and `TANGENT_SERVER_ID` apply only to the source-only [experimental remote harness](development.md#experimental-remote-harness), not distributed builds.

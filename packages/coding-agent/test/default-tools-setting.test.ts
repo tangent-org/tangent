@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { getModel } from "@earendil-works/pi-ai/compat";
+import { getModel } from "@tangent-ai/tangent-ai/compat";
 import { Type } from "typebox";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createAgentSessionFromServices, createAgentSessionServices } from "../src/core/agent-session-services.ts";
@@ -94,16 +94,16 @@ describe("defaultTools setting", () => {
 				],
 			},
 			[
-				(pi) => {
-					pi.registerTool({
+				(tangent) => {
+					tangent.registerTool({
 						name: "static_tool",
 						label: "Static Tool",
 						description: "Statically registered extension tool",
 						parameters: Type.Object({}),
 						execute: async () => ({ content: [{ type: "text", text: "ok" }], details: {} }),
 					});
-					pi.on("session_start", () => {
-						pi.registerTool({
+					tangent.on("session_start", () => {
+						tangent.registerTool({
 							name: "dynamic_tool",
 							label: "Dynamic Tool",
 							description: "Dynamically registered extension tool",

@@ -1,7 +1,7 @@
 {
-	"name": "@earendil-works/pi-server",
+	"name": "@tangent-ai/tangent-server",
 	"version": "0.85.1",
-	"description": "experimental server package for pi",
+	"description": "experimental server package for tangent",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -33,14 +33,14 @@
 		"prepublishOnly": "npm run clean && npm run build"
 	},
 	"keywords": [
-		"pi",
+		"tangent",
 		"server"
 	],
 	"author": "Earendil Works",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/earendil-works/pi.git",
+		"url": "git+https://github.com/earendil-works/tangent.git",
 		"directory": "packages/server"
 	},
 	"engines": {
@@ -48,8 +48,8 @@
 	},
 	"dependencies": {
 		"@earendil-works/chord": "^0.85.1",
-		"@earendil-works/pi-agent-core": "^0.85.1",
-		"@earendil-works/pi-protocol": "^0.85.1"
+		"@tangent-ai/tangent-agent-core": "^0.85.1",
+		"@tangent-ai/tangent-protocol": "^0.85.1"
 	},
 	"devDependencies": {
 		"shx": "0.4.0",

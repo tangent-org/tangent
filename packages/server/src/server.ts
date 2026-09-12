@@ -8,7 +8,7 @@ import {
 	type ServiceCall,
 	type ServiceProviderUpdate,
 } from "@earendil-works/chord";
-import { BACKGROUND_CONTEXT, type SessionMetadata, TODO_CONTEXT, withAbortSignal } from "@earendil-works/pi-agent-core";
+import { BACKGROUND_CONTEXT, type SessionMetadata, TODO_CONTEXT, withAbortSignal } from "@tangent-ai/tangent-agent-core";
 import {
 	type CancelEnvelope,
 	type ClientHello,
@@ -27,7 +27,7 @@ import {
 	type ServerHello,
 	type ServerHelloError,
 	type ServerMessage,
-} from "@earendil-works/pi-protocol";
+} from "@tangent-ai/tangent-protocol";
 import {
 	type ByteConnection,
 	type ByteConnectionHandler,

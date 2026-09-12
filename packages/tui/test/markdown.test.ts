@@ -839,8 +839,8 @@ after`,
 \[
 A=
 \begin{pmatrix}
-\pi & 0\\
-0 & \frac{1}{\pi}
+\tangent & 0\\
+0 & \frac{1}{\tangent}
 \end{pmatrix}.
 \]`,
 				0,

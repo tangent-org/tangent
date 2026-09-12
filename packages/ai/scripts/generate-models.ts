@@ -1637,7 +1637,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 				}
 
 				// models.dev reports Vertex cache_read/cache_write values for Gemini 2.5 Flash that
-				// do not match the official Gemini API standard pricing table. pi only accounts
+				// do not match the official Gemini API standard pricing table. tangent only accounts
 				// cachedContentTokenCount as cacheRead.
 				const cacheRead = modelId === "gemini-2.5-flash" ? 0.03 : source.cost?.cache_read || 0;
 				models.push({
@@ -2385,7 +2385,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 		// Process Alibaba Cloud Model Studio Token Plan models. International and
 		// China use separate endpoints and API keys (sk-sp- prefix). The Individual
 		// provider reuses the international source and endpoint with a narrower catalog.
-		// models.dev keys are "alibaba-token-plan[-cn]"; pi exposes them as
+		// models.dev keys are "alibaba-token-plan[-cn]"; tangent exposes them as
 		// "qwen-token-plan[-cn]" plus the Individual catalog view.
 		const qwenTokenPlanCompat: OpenAICompletionsCompat = {
 			thinkingFormat: "qwen",

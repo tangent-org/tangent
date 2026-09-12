@@ -1,5 +1,5 @@
-import type { AgentLane, OperationResultRecord, SuspendedRun } from "@earendil-works/pi-agent-core";
-import type { ImageContent } from "@earendil-works/pi-ai";
+import type { AgentLane, OperationResultRecord, SuspendedRun } from "@tangent-ai/tangent-agent-core";
+import type { ImageContent } from "@tangent-ai/tangent-ai";
 import type {
 	AgentController as AgentControllerService,
 	AgentOperationError,

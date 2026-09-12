@@ -17,11 +17,11 @@
  * is used automatically (syntax highlighting, line numbers, truncation warnings).
  *
  * Usage:
- *   pi -e ./tool-override.ts
+ *   tangent -e ./tool-override.ts
  */
 
-import type { TextContent } from "@earendil-works/pi-ai";
-import { type ExtensionAPI, getAgentDir, withFileMutationQueue } from "@earendil-works/pi-coding-agent";
+import type { TextContent } from "@tangent-ai/tangent-ai";
+import { type ExtensionAPI, getAgentDir, withFileMutationQueue } from "@tangent-ai/tangent-coding-agent";
 import { constants, readFileSync } from "fs";
 import { access, appendFile, readFile } from "fs/promises";
 import { join, resolve } from "path";
@@ -65,8 +65,8 @@ const readSchema = Type.Object({
 	limit: Type.Optional(Type.Number({ description: "Maximum number of lines to read" })),
 });
 
-export default function (pi: ExtensionAPI) {
-	pi.registerTool({
+export default function (tangent: ExtensionAPI) {
+	tangent.registerTool({
 		name: "read", // Same name as built-in - this will override it
 		label: "read (audited)",
 		description:
@@ -129,7 +129,7 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	// Also register a command to view the access log
-	pi.registerCommand("read-log", {
+	tangent.registerCommand("read-log", {
 		description: "View the file access log",
 		handler: async (_args, ctx) => {
 			try {

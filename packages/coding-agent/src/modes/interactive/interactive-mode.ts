@@ -7,9 +7,9 @@ import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { AgentMessage, ThinkingLevel } from "@earendil-works/pi-agent-core";
-import type { AuthEvent, AuthPrompt } from "@earendil-works/pi-ai";
-import type { AssistantMessage, ImageContent, Message, Model, Usage } from "@earendil-works/pi-ai/compat";
+import type { AgentMessage, ThinkingLevel } from "@tangent-ai/tangent-agent-core";
+import type { AuthEvent, AuthPrompt } from "@tangent-ai/tangent-ai";
+import type { AssistantMessage, ImageContent, Message, Model, Usage } from "@tangent-ai/tangent-ai/compat";
 import type {
 	AutocompleteItem,
 	AutocompleteProvider,
@@ -21,8 +21,8 @@ import type {
 	OverlayOptions,
 	SlashCommand,
 	TuiMainScreenRenderState,
-} from "@earendil-works/pi-tui";
-import * as TuiLayouts from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-tui";
+import * as TuiLayouts from "@tangent-ai/tangent-tui";
 import {
 	CombinedAutocompleteProvider,
 	type Component,
@@ -41,7 +41,7 @@ import {
 	TuiAltScreen,
 	TuiMainScreen,
 	visibleWidth,
-} from "@earendil-works/pi-tui";
+} from "@tangent-ai/tangent-tui";
 import chalk from "chalk";
 import { spawn } from "child_process";
 import {
@@ -1245,7 +1245,7 @@ export class InteractiveMode {
 			return;
 		}
 
-		void fetch(`https://pi.dev/api/report-install?version=${encodeURIComponent(version)}`, {
+		void fetch(`https://tangent.dev/api/report-install?version=${encodeURIComponent(version)}`, {
 			headers: {
 				"User-Agent": getPiUserAgent(version),
 			},
@@ -3897,7 +3897,7 @@ export class InteractiveMode {
 			new Text(
 				theme.fg(
 					"warning",
-					`This project is not trusted. Project ${CONFIG_DIR_NAME} resources and packages are ignored. Use /trust to save a trust decision, then restart pi.`,
+					`This project is not trusted. Project ${CONFIG_DIR_NAME} resources and packages are ignored. Use /trust to save a trust decision, then restart tangent.`,
 				),
 				1,
 				0,
@@ -4072,7 +4072,7 @@ export class InteractiveMode {
 
 		// Restore the terminal before the process dies on any uncaught throw.
 		// Without this, an unhandled exception from extension code (or anywhere
-		// in pi) leaves the terminal in raw mode with no cursor.
+		// in tangent) leaves the terminal in raw mode with no cursor.
 		const uncaughtExceptionHandler = (error: Error) => this.uncaughtCrash(error);
 		process.prependListener("uncaughtException", uncaughtExceptionHandler);
 		this.signalCleanupHandlers.push(() => process.off("uncaughtException", uncaughtExceptionHandler));
@@ -4285,7 +4285,7 @@ export class InteractiveMode {
 	showNewVersionNotification(release: LatestPiRelease): void {
 		const action = theme.fg("accent", `${APP_NAME} update`);
 		const updateInstruction = theme.fg("muted", `New version ${release.version} is available. Run `) + action;
-		const changelogUrl = "https://pi.dev/changelog";
+		const changelogUrl = "https://tangent.dev/changelog";
 		const changelogLink = getCapabilities().hyperlinks
 			? hyperlink(theme.fg("accent", changelogUrl), changelogUrl)
 			: theme.fg("accent", changelogUrl);
