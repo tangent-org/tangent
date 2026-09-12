@@ -3,7 +3,7 @@ import { VERSION } from "../config.ts";
 import { fetchWithRetry } from "../utils/management-http.ts";
 import { getPiUserAgent } from "../utils/pi-user-agent.ts";
 
-const DEFAULT_CATALOG_BASE_URL = "https://tangent.dev";
+const DEFAULT_CATALOG_BASE_URL = "";   // 无自有目录服务;空 = 跳过远程目录刷新(用内置静态表)
 const REMOTE_CATALOG_ATTEMPT_TIMEOUT_MS = 4_000;
 export const REMOTE_CATALOG_REFRESH_INTERVAL_MS = 4 * 60 * 60 * 1000;
 
@@ -77,6 +77,7 @@ export function withRemoteCatalog(
 
 			// Only revalidate when a cached body backs the validator, so a 304 can never
 			// leave the overlay empty.
+			if (!catalogBaseUrl) return;   // 未配置目录服务:仅用内置静态模型表
 			const validator = stored?.models.length ? stored.etag : undefined;
 			const url = new URL(`/api/models/providers/${encodeURIComponent(provider.id)}`, catalogBaseUrl);
 			const response = await fetchWithRetry(

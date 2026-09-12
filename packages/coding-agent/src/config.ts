@@ -512,7 +512,7 @@ export function expandTildePath(path: string): string {
 	return normalizePath(path);
 }
 
-const DEFAULT_SHARE_VIEWER_URL = "https://tangent.dev/session/";
+const DEFAULT_SHARE_VIEWER_URL = "";   // 未配置 PI_SHARE_VIEWER_URL 时 /share 不可用
 
 /** Get the share viewer URL for a gist ID. */
 export function getShareViewerUrl(gistId: string): string {

@@ -28,6 +28,7 @@ interface WsEnvelope {
 
 interface ServerConfig {
 	port: number;
+	host: string;
 	token: string;
 	projectsDir: string;
 	webDist?: string;
@@ -41,12 +42,13 @@ function loadConfig(): ServerConfig {
 		const cfg = JSON.parse(fs.readFileSync(file, "utf8")) as Partial<ServerConfig>;
 		return {
 			port: cfg.port ?? DEFAULT_PORT,
+			host: cfg.host ?? "127.0.0.1",   // 默认回环;LAN/隧道场景显式配 "0.0.0.0"
 			token: cfg.token ?? "dev-token",
 			projectsDir: cfg.projectsDir ?? path.join(os.homedir(), "wtangent-projects"),
 			webDist: cfg.webDist,
 		};
 	} catch {
-		return { port: DEFAULT_PORT, token: "dev-token", projectsDir: path.join(os.homedir(), "wtangent-projects") };
+		return { port: DEFAULT_PORT, host: "127.0.0.1", token: "dev-token", projectsDir: path.join(os.homedir(), "wtangent-projects") };
 	}
 }
 
@@ -317,8 +319,15 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	// projectsDir 启动即建(git-exec 的 cwd 前提)
 	fs.mkdirSync(config.projectsDir, { recursive: true });
 
-	server.listen(config.port, "0.0.0.0", () => {
-		console.error(`[wtangent] LAN 服务 :${config.port}(token=${config.token ? "已配置" : "缺省"})`);
+	// 优雅处理:端口被占(另一个 tangent 实例/旧进程)只提示,绝不让 TUI 崩溃
+	server.on("error", (err: NodeJS.ErrnoException) => {
+		const msg = err.code === "EADDRINUSE"
+			? `端口 ${config.port} 已被占用(另一个 tangent 实例在跑?),LAN 服务未启动`
+			: `LAN 服务启动失败: ${err.message}`;
+		console.error(`[wtangent] ${msg}`);
+	});
+	server.listen(config.port, config.host, () => {
+		console.error(`[wtangent] LAN 服务 http://${config.host}:${config.port}`);
 	});
 
 	pi.registerCommand("server", {

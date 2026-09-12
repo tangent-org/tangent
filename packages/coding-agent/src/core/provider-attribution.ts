@@ -43,7 +43,7 @@ function getDefaultAttributionHeaders(
 
 	if (isOpenRouterModel(model)) {
 		return {
-			"HTTP-Referer": "https://tangent.dev",
+			"HTTP-Referer": "https://github.com/tangent-org/tangent",
 			"X-OpenRouter-Title": "tangent",
 			"X-OpenRouter-Categories": "cli-agent",
 		};
