@@ -30,6 +30,7 @@ interface ServerConfig {
 	port: number;
 	host: string;
 	token: string;
+	basic?: { user: string; pass: string };
 	projectsDir: string;
 	webDist?: string;
 }
@@ -43,7 +44,8 @@ function loadConfig(): ServerConfig {
 		return {
 			port: cfg.port ?? DEFAULT_PORT,
 			host: cfg.host ?? "127.0.0.1",   // 默认回环;LAN/隧道场景显式配 "0.0.0.0"
-			token: cfg.token ?? "dev-token",
+			token: cfg.token ?? "",           // 空 = 未启用 token(与 basic 二选一)
+			basic: cfg.basic,
 			projectsDir: cfg.projectsDir ?? path.join(os.homedir(), "wtangent-projects"),
 			webDist: cfg.webDist,
 		};
@@ -146,9 +148,12 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	const server = http.createServer((req, res) => {
 		const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "localhost"}`);
 		const p = url.pathname;
-		const tokenOk =
-			req.headers.authorization === `Bearer ${config.token}` ||
-			url.searchParams.get("token") === config.token;
+		const auth = req.headers.authorization ?? "";
+		const tokenOk = config.token
+			? auth === `Bearer ${config.token}` || url.searchParams.get("token") === config.token
+			: config.basic
+				? auth === `Basic ${Buffer.from(`${config.basic.user}:${config.basic.pass}`).toString("base64")}`
+				: true;   // 未配置任何鉴权 = 开放(与 opencode serve 未设密码同语义,启动时警告)
 		if (!tokenOk) {
 			res.writeHead(401, { "Content-Type": "application/json" });
 			res.end(JSON.stringify({ error: "unauthorized" }));
@@ -269,7 +274,14 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	const wss = new WebSocketServer({ noServer: true });
 	server.on("upgrade", (req, socket, head) => {
 		const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "localhost"}`);
-		if (!url.pathname.startsWith("/ws") || url.searchParams.get("token") !== config.token) {
+		const auth = req.headers.authorization ?? "";
+		const basicOk = config.basic
+			? auth === `Basic ${Buffer.from(`${config.basic.user}:${config.basic.pass}`).toString("base64")}` ||
+			  url.searchParams.get("basic") ===
+				  Buffer.from(`${config.basic.user}:${config.basic.pass}`).toString("base64")
+			: false;
+		const tokenOk = config.token ? url.searchParams.get("token") === config.token : false;
+		if (!basicOk && !tokenOk) {
 			socket.destroy();
 			return;
 		}
@@ -327,7 +339,8 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 		console.error(`[wtangent] ${msg}`);
 	});
 	server.listen(config.port, config.host, () => {
-		console.error(`[wtangent] LAN 服务 http://${config.host}:${config.port}`);
+		const secured = config.token || config.basic;
+		console.error(`[wtangent] server listening on http://${config.host}:${config.port}${secured ? "" : "  (警告: 未配置 token/basic,服务无鉴权)"}`);
 	});
 
 	pi.registerCommand("server", {

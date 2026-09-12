@@ -1,14 +1,23 @@
-// -R 瘦客户端:连接 remote wtangent 服务器(流式聊天,行式渲染)。
-// 由 bin/tangent.js 调用:runRemoteChat(base, token)。
+// attach 瘦客户端:连接 remote wtangent 服务器(流式聊天,行式渲染)。
+// 由 bin/tangent.js 调用:runRemoteChat({ base, token, basic })。
 
 import readline from "node:readline";
 import WebSocket from "ws";
 
-export function runRemoteChat(base, token) {
-  const wsUrl = `${base.replace(/^http/, "ws")}/ws${token ? `?token=${token}` : ""}`;
+export function runRemoteChat({ base, token, basic }) {
+  const authQ = token
+    ? `?token=${encodeURIComponent(token)}`
+    : basic
+      ? `?basic=${Buffer.from(`${basic.user}:${basic.pass}`).toString("base64")}`
+      : "";
+  const wsUrl = `${base.replace(/^http/, "ws")}/ws${authQ}`;
+  const wsHeaders = basic
+    ? { authorization: `Basic ${Buffer.from(`${basic.user}:${basic.pass}`).toString("base64")}` }
+    : undefined;
+
   console.log(`连接 ${base} …(Ctrl-C 退出)`);
 
-  const ws = new WebSocket(wsUrl);
+  const ws = new WebSocket(wsUrl, { headers: wsHeaders });
   let open = false;
   const queue = [];
   const send = env => {

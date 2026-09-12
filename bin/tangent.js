@@ -2,7 +2,7 @@
 // tangent — wtangent CLI:
 //   tangent                    交互 TUI(pi 自带;LAN 服务默认回环 127.0.0.1:8890)
 //   tangent serve [-R|-U]      headless LAN/Web 服务(服务器常驻;注册后续版本)
-//   tangent -R <名|code|URL>   瘦客户端:连接 remote 服务器流式聊天(笔记本零负载)
+//   tangent attach <URL|名> [-c] [-p pass] [-u user]   瘦客户端:连远端服务器流式聊天(-c 续当前会话)
 //   tangent remote add|list|remove   管理 remote(存 ~/.tangent/remotes.json)
 // remote 条目:{name, host, port, token, code};code 解析优先(隧道地址变,code 不变)
 
@@ -74,14 +74,15 @@ async function serve(args) {
 }
 
 // ================= -R 瘦客户端 =================
-async function remoteChat(target) {
+async function remoteChat(target, opts = {}) {
   const resolved = resolveRemote(target);
   if (!resolved) {
     err(`未找到 remote "${target}"(tangent remote add 添加,或直接给 URL)`);
     process.exit(1);
   }
+  if (opts.user && opts.pass) resolved.basic = { user: opts.user, pass: opts.pass };
   const { runRemoteChat } = await import("./remote-chat.js");
-  runRemoteChat(resolved.base, resolved.token);
+  runRemoteChat(resolved);
 }
 
 // ================= remote 管理 =================
@@ -120,6 +121,12 @@ if (sub === "serve") {
   void serve(args);
 } else if (sub === "remote") {
   remoteManage(args);
+} else if (sub === "attach") {
+  void remoteChat(args[0], {
+    pass: args.includes("-p") ? args[args.indexOf("-p") + 1] : args.includes("--password") ? args[args.indexOf("--password") + 1] : undefined,
+    user: args.includes("-u") || args.includes("--username") ? args[(args.indexOf("-u") >= 0 ? args.indexOf("-u") : args.indexOf("--username")) + 1] : undefined,
+    continueLast: args.includes("-c"),
+  });
 } else if (sub === "-R" || sub === "--remote") {
   void remoteChat(args[0]);
 } else if (sub === undefined) {
