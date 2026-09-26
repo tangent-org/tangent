@@ -367,6 +367,8 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 		admin: "完全访问 + 命令提权(无 UAC 弹窗)",
 	};
 
+	let prevBeforeAdmin: PermissionMode | null = null;   // 进入 admin 前的档位(admin 失败时回退到它)
+
 	async function applyMode(ctx: any, mode: PermissionMode): Promise<void> {
 		const prev = getMode();
 		setMode(mode);
@@ -374,13 +376,21 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 		ctx.ui.notify(`权限模式 → ${mode}(${MODE_HELP[mode]})`, "info");
 		if (process.platform === "win32") {
 			if (mode === "admin") {
-				// 切档即预热:UAC 只此一次;拒绝则提示回退普通执行
+				prevBeforeAdmin = prev;
+				// 切档即预热:UAC 只此一次;取消/失败 → 自动回退到改动之前的模式
 				void ensureElevatedHelper().then(ok => {
-					if (!ok) ctx.ui.notify("提权 helper 未启动(可能拒绝了 UAC);admin 档将回退普通执行", "warning");
+					if (!ok) {
+						const back = prevBeforeAdmin ?? "full";
+						prevBeforeAdmin = null;
+						setMode(back);
+						refreshModeUI(ctx);
+						ctx.ui.notify(`提权未启动(可能拒绝了 UAC),已回退到 ${back}`, "warning");
+					}
 				});
 			} else if (prev === "admin") {
-				// 真回退:离开 admin → 提权 helper 立即自毁;界面无提示(权限显示已随 widget 恢复)
+				// 离开 admin:提权 helper 立即自毁(静默,权限显示已如实更新)
 				shutdownElevatedHelper();
+				prevBeforeAdmin = null;
 			}
 		}
 	}
