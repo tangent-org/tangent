@@ -101,7 +101,6 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	const config = loadConfig();
 	let ctxRef: any = null;
 	let degraded = false;
-	let listening = false;
 	const pending = new Map<string, (answer: any) => void>();
 	const clients = new Set<WebSocket>();
 	const eventCounts: Record<string, number> = {};
@@ -129,17 +128,8 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	pi.on("session_start" as any, async (_e: any, ctx: any) => {
 		ctxRef = ctx;
 		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
-		// TUI 交互模式不启 LAN(不污染界面);rpc/print/json(headless、serve)才监听
-		if (!listening && ctx.mode !== "tui") {
-			listening = true;
-			server.listen(config.port, config.host, () => {
-				const secured = config.token || config.basic;
-				console.error(
-					`[wtangent] server listening on http://${config.host}:${config.port}${secured ? "" : "  (警告: 未配置 token/basic,服务无鉴权)"}`,
-				);
-			});
-		}
 	});
+
 	onPiEvent("agent_start", () => ({ type: "__ignore__" }));
 	onPiEvent("turn_start", () => ({ type: "__ignore__" }));
 	onPiEvent("turn_end", () => ({ type: "turn_end", finalText: undefined }));
@@ -347,11 +337,16 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	fs.mkdirSync(config.projectsDir, { recursive: true });
 
 	// 优雅处理:端口被占(另一个 tangent 实例/旧进程)只提示,绝不让 TUI 崩溃
+	// 所有模式常开;启动/错误输出:非 TUI 模式打 console,TUI 静默(opencode 同语义)
+	server.listen(config.port, config.host, () => {
+		const secured = config.token || config.basic;
+		const msg = `server listening on http://${config.host}:${config.port}${secured ? "" : "  (警告: 未配置 token/basic,服务无鉴权)"}`;
+		if (process.env.TANGENT_QUIET !== "1" && !config.token) console.error(`[wtangent] ${msg}`);
+	});
 	server.on("error", (err: NodeJS.ErrnoException) => {
-		const msg = err.code === "EADDRINUSE"
-			? `端口 ${config.port} 已被占用(另一个 tangent 实例在跑?),LAN 服务未启动`
-			: `LAN 服务启动失败: ${err.message}`;
-		console.error(`[wtangent] ${msg}`);
+		// EADDRINUSE = 已有 tangent 实例在服务,静默忽略(谁先起谁服务);其余错误照报
+		if (err.code === "EADDRINUSE") return;
+		console.error(`[wtangent] LAN 服务错误: ${err.message}`);
 	});
 	pi.registerCommand("server", {
 		description: "wtangent 服务状态",
