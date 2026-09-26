@@ -11,7 +11,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { getMode, setMode, usesElevatedShell, type PermissionMode } from "./elevation.ts";
+import { ensureElevatedHelper, getMode, setMode, type PermissionMode } from "./elevation.ts";
 
 interface WsEnvelope {
 	type: string;
@@ -101,6 +101,7 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	const config = loadConfig();
 	let ctxRef: any = null;
 	let degraded = false;
+	let listening = false;
 	const pending = new Map<string, (answer: any) => void>();
 	const clients = new Set<WebSocket>();
 	const eventCounts: Record<string, number> = {};
@@ -128,6 +129,16 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	pi.on("session_start" as any, async (_e: any, ctx: any) => {
 		ctxRef = ctx;
 		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
+		// TUI 交互模式不启 LAN(不污染界面);rpc/print/json(headless、serve)才监听
+		if (!listening && ctx.mode !== "tui") {
+			listening = true;
+			server.listen(config.port, config.host, () => {
+				const secured = config.token || config.basic;
+				console.error(
+					`[wtangent] server listening on http://${config.host}:${config.port}${secured ? "" : "  (警告: 未配置 token/basic,服务无鉴权)"}`,
+				);
+			});
+		}
 	});
 	onPiEvent("agent_start", () => ({ type: "__ignore__" }));
 	onPiEvent("turn_start", () => ({ type: "__ignore__" }));
@@ -342,11 +353,6 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 			: `LAN 服务启动失败: ${err.message}`;
 		console.error(`[wtangent] ${msg}`);
 	});
-	server.listen(config.port, config.host, () => {
-		const secured = config.token || config.basic;
-		console.error(`[wtangent] server listening on http://${config.host}:${config.port}${secured ? "" : "  (警告: 未配置 token/basic,服务无鉴权)"}`);
-	});
-
 	pi.registerCommand("server", {
 		description: "wtangent 服务状态",
 		handler: async (_args: string, ctx: any) => {
@@ -365,10 +371,16 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 		admin: "完全访问 + 命令提权(无 UAC 弹窗)",
 	};
 
-	function applyMode(ctx: any, mode: PermissionMode): void {
+	async function applyMode(ctx: any, mode: PermissionMode): Promise<void> {
 		setMode(mode);
 		ctx.ui.setStatus("wtangent-mode", `权限:${mode}`);
 		ctx.ui.notify(`权限模式 → ${mode}(${MODE_HELP[mode]})`, "info");
+		if (mode === "admin" && process.platform === "win32") {
+			// 切档即预热:helper UAC 只此一次;用户拒绝则 notify 提示会回退普通执行
+			void ensureElevatedHelper().then(ok => {
+				if (!ok) ctx.ui.notify("提权 helper 未启动(可能拒绝了 UAC);admin 档将回退普通执行", "warning");
+			});
+		}
 	}
 
 	pi.registerCommand("mode", {
@@ -380,13 +392,13 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 					ctx.ui.notify(`未知模式 "${args.trim()}"(可选:plan/confirm/autoedit/full/admin)`, "error");
 					return;
 				}
-				applyMode(ctx, next);
+				await applyMode(ctx, next);
 				return;
 			}
 			// 无参:TUI 弹五项选择(opencode/ZCode 同款交互)
 			const modes: PermissionMode[] = ["plan", "confirm", "autoedit", "full", "admin"];
 			const picked = await ctx.ui.select("权限模式", modes.map(m => `${m} — ${MODE_HELP[m]}`));
-			if (picked) applyMode(ctx, picked.split(" ")[0] as PermissionMode);
+			if (picked) await applyMode(ctx, picked.split(" ")[0] as PermissionMode);
 		},
 	});
 
