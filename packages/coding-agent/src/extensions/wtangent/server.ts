@@ -379,9 +379,8 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 					if (!ok) ctx.ui.notify("提权 helper 未启动(可能拒绝了 UAC);admin 档将回退普通执行", "warning");
 				});
 			} else if (prev === "admin") {
-				// 真回退:离开 admin → 提权 helper 立即自毁,不留权限残留
+				// 真回退:离开 admin → 提权 helper 立即自毁;界面无提示(权限显示已随 widget 恢复)
 				shutdownElevatedHelper();
-				ctx.ui.notify("已退出管理员模式,提权 helper 已关闭", "info");
 			}
 		}
 	}
