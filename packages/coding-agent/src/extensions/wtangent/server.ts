@@ -11,7 +11,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { ensureElevatedHelper, getMode, setMode, type PermissionMode } from "./elevation.ts";
+import { ensureElevatedHelper, getMode, setMode, shutdownElevatedHelper, type PermissionMode } from "./elevation.ts";
 
 interface WsEnvelope {
 	type: string;
@@ -128,6 +128,7 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	pi.on("session_start" as any, async (_e: any, ctx: any) => {
 		ctxRef = ctx;
 		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
+		refreshModeUI(ctx);
 	});
 
 	onPiEvent("agent_start", () => ({ type: "__ignore__" }));
@@ -367,15 +368,33 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	};
 
 	async function applyMode(ctx: any, mode: PermissionMode): Promise<void> {
+		const prev = getMode();
 		setMode(mode);
-		ctx.ui.setStatus("wtangent-mode", `权限:${mode}`);
+		refreshModeUI(ctx);
 		ctx.ui.notify(`权限模式 → ${mode}(${MODE_HELP[mode]})`, "info");
-		if (mode === "admin" && process.platform === "win32") {
-			// 切档即预热:helper UAC 只此一次;用户拒绝则 notify 提示会回退普通执行
-			void ensureElevatedHelper().then(ok => {
-				if (!ok) ctx.ui.notify("提权 helper 未启动(可能拒绝了 UAC);admin 档将回退普通执行", "warning");
-			});
+		if (process.platform === "win32") {
+			if (mode === "admin") {
+				// 切档即预热:UAC 只此一次;拒绝则提示回退普通执行
+				void ensureElevatedHelper().then(ok => {
+					if (!ok) ctx.ui.notify("提权 helper 未启动(可能拒绝了 UAC);admin 档将回退普通执行", "warning");
+				});
+			} else if (prev === "admin") {
+				// 真回退:离开 admin → 提权 helper 立即自毁,不留权限残留
+				shutdownElevatedHelper();
+				ctx.ui.notify("已退出管理员模式,提权 helper 已关闭", "info");
+			}
 		}
+	}
+
+	function refreshModeUI(ctx: any): void {
+		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
+		const icon = getMode() === "admin" ? "⚡" : "◈";
+		ctx.ui.setWidget?.("wtangent-mode", [
+			"╭─ tangent ──────────────────────╮",
+			`│  ${icon} 权限模式  ${getMode().padEnd(8)}│`,
+			`│  服务  :${String(config.port).padEnd(21)}│`,
+			"╰────────────────────────────────╯",
+		]);
 	}
 
 	pi.registerCommand("mode", {
@@ -392,8 +411,14 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 			}
 			// 无参:TUI 弹五项选择(opencode/ZCode 同款交互)
 			const modes: PermissionMode[] = ["plan", "confirm", "autoedit", "full", "admin"];
-			const picked = await ctx.ui.select("权限模式", modes.map(m => `${m} — ${MODE_HELP[m]}`));
-			if (picked) await applyMode(ctx, picked.split(" ")[0] as PermissionMode);
+			const picked = await ctx.ui.select(
+				"权限模式(当前:" + getMode() + ")",
+				modes.map(m => {
+					const mark = m === getMode() ? "  ✓" : "";
+					return `${m}  ·  ${MODE_HELP[m]}${mark}`;
+				}),
+			);
+			if (picked) await applyMode(ctx, picked.split("  ")[0].trim() as PermissionMode);
 		},
 	});
 

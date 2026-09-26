@@ -15,6 +15,8 @@ import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 
+const BS = String.fromCharCode(92);
+
 export type PermissionMode = "plan" | "confirm" | "autoedit" | "full" | "admin";
 
 const MODES: PermissionMode[] = ["plan", "confirm", "autoedit", "full", "admin"];
@@ -98,6 +100,7 @@ export async function ensureElevatedHelper(): Promise<boolean> {
 			'    const line = buf.split("\\n")[0]; buf = "";',
 			'    try {',
 			'      const req = JSON.parse(line);',
+			'      if (req.command === "__shutdown__") { sock.write(JSON.stringify({output:"bye",exitCode:0})+"' + BS + 'n"); srv.close(); process.exit(0); }',
 			'      if (req.token !== TOKEN) { sock.write(JSON.stringify({output:"denied",exitCode:126})+"\\n"); return; }',
 			'      const proc = spawn(req.command, { cwd: req.cwd, shell: true });',
 			'      let out = "";',
@@ -141,4 +144,20 @@ export async function execElevated(command: string, cwd: string): Promise<{ outp
 		console.error(`[wtangent] 提权执行失败(回退普通): ${e instanceof Error ? e.message : e}`);
 		return null;
 	}
+}
+
+/** 离开 admin 模式:通知 helper 自毁(提权状态真回退,而非闲置遗留) */
+export function shutdownElevatedHelper(): void {
+	if (!helperAlive) return;
+	try {
+		const sock = net.connect(PIPE_NAME);
+		sock.on("connect", () => {
+			sock.write(JSON.stringify({ command: "__shutdown__", token: SESSION_TOKEN }) + "\n");
+			sock.end();
+		});
+		sock.on("error", () => {});
+	} catch {
+		/* helper 已死,无需处理 */
+	}
+	helperAlive = false;
 }
