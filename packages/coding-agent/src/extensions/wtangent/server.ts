@@ -11,7 +11,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { getMode, setMode, usesElevatedShell } from "./elevation.ts";
+import { getMode, setMode, usesElevatedShell, type PermissionMode } from "./elevation.ts";
 
 interface WsEnvelope {
 	type: string;
@@ -125,7 +125,10 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 		});
 	}
 
-	onPiEvent("session_start", () => ({ type: "__ignore__" }));
+	pi.on("session_start" as any, async (_e: any, ctx: any) => {
+		ctxRef = ctx;
+		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
+	});
 	onPiEvent("agent_start", () => ({ type: "__ignore__" }));
 	onPiEvent("turn_start", () => ({ type: "__ignore__" }));
 	onPiEvent("turn_end", () => ({ type: "turn_end", finalText: undefined }));
@@ -354,8 +357,22 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 		},
 	});
 
+	const MODE_HELP: Record<PermissionMode, string> = {
+		plan: "编辑前先出计划",
+		confirm: "改文件前先问我",
+		autoedit: "自动编辑文件",
+		full: "减少确认次数",
+		admin: "完全访问 + 命令提权(无 UAC 弹窗)",
+	};
+
+	function applyMode(ctx: any, mode: PermissionMode): void {
+		setMode(mode);
+		ctx.ui.setStatus("wtangent-mode", `权限:${mode}`);
+		ctx.ui.notify(`权限模式 → ${mode}(${MODE_HELP[mode]})`, "info");
+	}
+
 	pi.registerCommand("mode", {
-		description: "权限模式:无参列出并循环切换;或 /mode plan|confirm|autoedit|full|admin",
+		description: "权限模式:TUI 弹选择;或 /mode plan|confirm|autoedit|full|admin 直设",
 		handler: async (args: string, ctx: any) => {
 			if (args && args.trim()) {
 				const next = setMode(args.trim());
@@ -363,13 +380,13 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 					ctx.ui.notify(`未知模式 "${args.trim()}"(可选:plan/confirm/autoedit/full/admin)`, "error");
 					return;
 				}
-				ctx.ui.notify(`权限模式 → ${next}`, "info");
+				applyMode(ctx, next);
 				return;
 			}
-			const modes = ["plan", "confirm", "autoedit", "full", "admin"];
-			const next = modes[(modes.indexOf(getMode()) + 1) % modes.length];
-			setMode(next);
-			ctx.ui.notify(`权限模式 → ${next}`, "info");
+			// 无参:TUI 弹五项选择(opencode/ZCode 同款交互)
+			const modes: PermissionMode[] = ["plan", "confirm", "autoedit", "full", "admin"];
+			const picked = await ctx.ui.select("权限模式", modes.map(m => `${m} — ${MODE_HELP[m]}`));
+			if (picked) applyMode(ctx, picked.split(" ")[0] as PermissionMode);
 		},
 	});
 
