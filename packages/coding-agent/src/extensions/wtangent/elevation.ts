@@ -118,10 +118,15 @@ export async function ensureElevatedHelper(): Promise<boolean> {
 		].join("\n"),
 	);
 	const { execSync } = await import("node:child_process");
-	execSync(
-		`powershell -NoProfile -Command "Start-Process node -ArgumentList '${helperScript.replace(/'/g, "''")}' -Verb RunAs -WindowStyle Hidden"`,
-		{ stdio: "ignore" },
-	);
+	try {
+		execSync(
+			`powershell -NoProfile -Command "Start-Process node -ArgumentList '${helperScript.replace(/'/g, "''")}' -Verb RunAs -WindowStyle Hidden"`,
+			{ stdio: "ignore" },
+		);
+	} catch {
+		// 用户拒绝 UAC(或系统策略阻止):静默返回,由上层轮询超时给出"未启动"提示
+		return false;
+	}
 	// 轮询等管道就绪(最多 15 秒:用户点 UAC)
 	for (let i = 0; i < 30; i++) {
 		await new Promise(r => setTimeout(r, 500));
