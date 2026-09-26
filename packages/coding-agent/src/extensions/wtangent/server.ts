@@ -11,6 +11,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
+import { getMode, setMode, usesElevatedShell } from "./elevation.ts";
 
 interface WsEnvelope {
 	type: string;
@@ -350,6 +351,25 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 				`wtangent: :${config.port} · 客户端 ${clients.size} · 注入 ${typeof pi.sendUserMessage === "function" ? "可用" : "降级"}`,
 				"info",
 			);
+		},
+	});
+
+	pi.registerCommand("mode", {
+		description: "权限模式:无参列出并循环切换;或 /mode plan|confirm|autoedit|full|admin",
+		handler: async (args: string, ctx: any) => {
+			if (args && args.trim()) {
+				const next = setMode(args.trim());
+				if (!next) {
+					ctx.ui.notify(`未知模式 "${args.trim()}"(可选:plan/confirm/autoedit/full/admin)`, "error");
+					return;
+				}
+				ctx.ui.notify(`权限模式 → ${next}`, "info");
+				return;
+			}
+			const modes = ["plan", "confirm", "autoedit", "full", "admin"];
+			const next = modes[(modes.indexOf(getMode()) + 1) % modes.length];
+			setMode(next);
+			ctx.ui.notify(`权限模式 → ${next}`, "info");
 		},
 	});
 

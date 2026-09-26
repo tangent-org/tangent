@@ -17,6 +17,7 @@ import { OutputAccumulator } from "./output-accumulator.ts";
 import { BASH_UPDATE_THROTTLE_MS, createShellRenderers } from "./renderers/bash.ts";
 import { wrapToolDefinition } from "./tool-definition-wrapper.ts";
 import { DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, formatSize, type TruncationResult } from "./truncate.ts";
+import { execElevated, usesElevatedShell } from "../../extensions/wtangent/elevation.ts";
 
 const MAX_TIMEOUT_MS = 2_147_483_647;
 const MAX_TIMEOUT_SECONDS = MAX_TIMEOUT_MS / 1000;
@@ -82,6 +83,15 @@ export function createLocalShellOperations(shellName: string, resolveShellConfig
 			const timeoutMs = resolveTimeoutMs(timeout);
 			if (signal?.aborted) {
 				throw new Error("aborted");
+			}
+			// wtangent:管理员模式 → 命令走提权 helper(UAC 一次,流式输出一次性回传)
+			if (usesElevatedShell()) {
+				const result = await execElevated(command, cwd);
+				if (result) {
+					onData(Buffer.from(result.output));
+					return { exitCode: result.exitCode };
+				}
+				// helper 不可用 → 回退普通执行(不静默,已在 execElevated 打过日志)
 			}
 			const shellConfig = resolveShellConfig();
 			try {
