@@ -1,4 +1,4 @@
-// attach 瘦客户端:连接 remote wtangent 服务器(流式聊天,行式渲染)。
+// attach 瘦客户端:连接 remote tangent 服务器(流式聊天,行式渲染)。
 // 由 bin/tangent.js 调用:runRemoteChat({ base, token, basic })。
 
 import readline from "node:readline";

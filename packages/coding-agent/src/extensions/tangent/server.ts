@@ -1,7 +1,7 @@
-// wtangent server 扩展(完整版):LAN/Web 会话服务。
+// tangent server 扩展(完整版):LAN/Web 会话服务。
 // - HTTP:REST(/health /sessions /prompt /reply /git-exec)+ WUI 静态托管
 // - WS:/ws?token= envelope 协议(ask/cancel/confirm/answer ↔ 流式事件)
-// - token 鉴权(Bearer / ?token=)全路由;config ~/.wtangent-server/config.json
+// - token 鉴权(Bearer / ?token=)全路由;config ~/.tangent-server/config.json
 // - 会话桥:pi.sendUserMessage 注入(void,fire-and-forget);pi 事件 → WS 广播
 
 import type { ExtensionAPI } from "../../core/extensions/types.ts";
@@ -39,7 +39,7 @@ interface ServerConfig {
 const DEFAULT_PORT = 8890;
 
 function loadConfig(): ServerConfig {
-	const file = path.join(os.homedir(), ".wtangent-server", "config.json");
+	const file = path.join(os.homedir(), ".tangent-server", "config.json");
 	try {
 		const cfg = JSON.parse(fs.readFileSync(file, "utf8")) as Partial<ServerConfig>;
 		return {
@@ -47,11 +47,11 @@ function loadConfig(): ServerConfig {
 			host: cfg.host ?? "127.0.0.1",   // 默认回环;LAN/隧道场景显式配 "0.0.0.0"
 			token: cfg.token ?? "",           // 空 = 未启用 token(与 basic 二选一)
 			basic: cfg.basic,
-			projectsDir: cfg.projectsDir ?? path.join(os.homedir(), "wtangent-projects"),
+			projectsDir: cfg.projectsDir ?? path.join(os.homedir(), "tangent-projects"),
 			webDist: cfg.webDist,
 		};
 	} catch {
-		return { port: DEFAULT_PORT, host: "127.0.0.1", token: "dev-token", projectsDir: path.join(os.homedir(), "wtangent-projects") };
+		return { port: DEFAULT_PORT, host: "127.0.0.1", token: "dev-token", projectsDir: path.join(os.homedir(), "tangent-projects") };
 	}
 }
 
@@ -127,7 +127,7 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 
 	pi.on("session_start" as any, async (_e: any, ctx: any) => {
 		ctxRef = ctx;
-		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
+		ctx.ui.setStatus("tangent-mode", `权限:${getMode()}`);
 		refreshModeUI(ctx);
 	});
 
@@ -342,18 +342,18 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	server.listen(config.port, config.host, () => {
 		const secured = config.token || config.basic;
 		const msg = `server listening on http://${config.host}:${config.port}${secured ? "" : "  (警告: 未配置 token/basic,服务无鉴权)"}`;
-		if (process.env.TANGENT_QUIET !== "1" && !config.token) console.error(`[wtangent] ${msg}`);
+		if (process.env.TANGENT_QUIET !== "1" && !config.token) console.error(`[tangent] ${msg}`);
 	});
 	server.on("error", (err: NodeJS.ErrnoException) => {
 		// EADDRINUSE = 已有 tangent 实例在服务,静默忽略(谁先起谁服务);其余错误照报
 		if (err.code === "EADDRINUSE") return;
-		console.error(`[wtangent] LAN 服务错误: ${err.message}`);
+		console.error(`[tangent] LAN 服务错误: ${err.message}`);
 	});
 	pi.registerCommand("server", {
-		description: "wtangent 服务状态",
+		description: "tangent 服务状态",
 		handler: async (_args: string, ctx: any) => {
 			ctx.ui.notify(
-				`wtangent: :${config.port} · 客户端 ${clients.size} · 注入 ${typeof pi.sendUserMessage === "function" ? "可用" : "降级"}`,
+				`tangent: :${config.port} · 客户端 ${clients.size} · 注入 ${typeof pi.sendUserMessage === "function" ? "可用" : "降级"}`,
 				"info",
 			);
 		},
@@ -396,9 +396,9 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	}
 
 	function refreshModeUI(ctx: any): void {
-		ctx.ui.setStatus("wtangent-mode", `权限:${getMode()}`);
+		ctx.ui.setStatus("tangent-mode", `权限:${getMode()}`);
 		const icon = getMode() === "admin" ? "⚡" : "◈";
-		ctx.ui.setWidget?.("wtangent-mode", [
+		ctx.ui.setWidget?.("tangent-mode", [
 			"╭─ tangent ──────────────────────╮",
 			`│  ${icon} 权限模式  ${getMode().padEnd(8)}│`,
 			`│  服务  :${String(config.port).padEnd(21)}│`,
@@ -432,7 +432,7 @@ export default async function (pi: ExtensionAPI): Promise<void> {
 	});
 
 	pi.registerCommand("token", {
-		description: "显示 wtangent token",
+		description: "显示 tangent token",
 		handler: async (_args: string, ctx: any) => {
 			ctx.ui.notify(`token: ${config.token}`, "info");
 		},

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// tangent — wtangent CLI:
+// tangent — tangent CLI:
 //   tangent                    交互 TUI(pi 自带;LAN 服务默认回环 127.0.0.1:8890)
 //   tangent serve [-R|-U]      headless LAN/Web 服务(服务器常驻;注册后续版本)
 //   tangent attach <URL|名> [-c] [-p pass] [-u user]   瘦客户端:连远端服务器流式聊天(-c 续当前会话)
@@ -67,7 +67,7 @@ async function serve(args) {
     err("找不到 pi(先安装:@tangent-ai/tangent-coding-agent 或上游 pi)");
     process.exit(1);
   }
-  log("启动 wtangent server(headless pi + LAN 服务)…");
+  log("启动 tangent server(headless pi + LAN 服务)…");
   const quoted = `"${pi}" --mode rpc -e "${path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:")), "..")}"`;
   const child = spawn(quoted, { stdio: ["pipe", "inherit", "inherit"], shell: process.platform === "win32" });
   child.on("exit", code => process.exit(code ?? 0));

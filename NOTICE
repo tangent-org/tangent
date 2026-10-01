@@ -9,5 +9,5 @@ config dir). Upstream changes are merged periodically from
 `earendil-works/pi` (remote: fork).
 
 Tangent-specific additions (not present upstream) live in:
-- `packages/coding-agent/src/extensions/wtangent/` — LAN/Web session service
+- `packages/coding-agent/src/extensions/tangent/` — LAN/Web session service
 - future: `tangent git [-S]`, service registration (systemd/NSSM), side-agent pipeline

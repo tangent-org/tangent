@@ -1,4 +1,4 @@
-// wtangent 权限模式 + 管理员提权:
+// tangent 权限模式 + 管理员提权:
 // 五档(对齐 ZCode):plan(编辑前先出计划) / confirm(变更前确认) / autoedit(自动编辑) /
 // full(完全访问) / admin(管理员 = full + shell 命令走提权 helper,无 UAC 弹窗)
 //
@@ -21,7 +21,7 @@ export type PermissionMode = "plan" | "confirm" | "autoedit" | "full" | "admin";
 
 const MODES: PermissionMode[] = ["plan", "confirm", "autoedit", "full", "admin"];
 const PIPE_NAME = "\\\\.\\pipe\\tangent-elevated";
-const SESSION_TOKEN = process.env.WTANGENT_SESSION_TOKEN ?? os.hostname();
+const SESSION_TOKEN = process.env.TANGENT_SESSION_TOKEN ?? os.hostname();
 
 let currentMode: PermissionMode = "full";
 let helperAlive = false;
@@ -146,7 +146,7 @@ export async function execElevated(command: string, cwd: string): Promise<{ outp
 		if (!(await ensureElevatedHelper())) return null;
 		return await helperRequest(command, cwd);
 	} catch (e) {
-		console.error(`[wtangent] 提权执行失败(回退普通): ${e instanceof Error ? e.message : e}`);
+		console.error(`[tangent] 提权执行失败(回退普通): ${e instanceof Error ? e.message : e}`);
 		return null;
 	}
 }

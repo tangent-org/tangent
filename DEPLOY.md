@@ -30,13 +30,13 @@ npm run build
 ## 3. 配置
 
 ```bash
-mkdir -p ~/.wtangent-server
-cat > ~/.wtangent-server/config.json <<'EOF'
+mkdir -p ~/.tangent-server
+cat > ~/.tangent-server/config.json <<'EOF'
 {
   "port": 8890,
   "host": "0.0.0.0",
   "token": "<生成一个随机 token>",
-  "projectsDir": "~/wtangent-projects"
+  "projectsDir": "~/tangent-projects"
 }
 EOF
 # token 生成:python3 -c "import secrets;print(secrets.token_urlsafe(18))"
@@ -48,8 +48,8 @@ EOF
 ## 4. 试跑
 
 ```bash
-WTANGENT_TOKEN=<上面的token> node packages/coding-agent/dist/bundle/cli.js --mode rpc
-# 看到 [wtangent] server listening on http://0.0.0.0:8890 即成功
+TANGENT_TOKEN=<上面的token> node packages/coding-agent/dist/bundle/cli.js --mode rpc
+# 看到 [tangent] server listening on http://0.0.0.0:8890 即成功
 ```
 
 笔记本验证:
@@ -62,15 +62,15 @@ tangent attach http://<盒子IP>:8890   # 或配了 remote 后:tangent attach <�
 ## 5. 常驻(systemd)
 
 ```bash
-sudo tee /etc/systemd/system/wtangent.service <<EOF
+sudo tee /etc/systemd/system/tangent.service <<EOF
 [Unit]
-Description=wtangent server (tangent LAN/Web)
+Description=tangent server (tangent LAN/Web)
 After=network-online.target
 
 [Service]
 User=$USER
 WorkingDirectory=$HOME/tangent/packages/coding-agent
-Environment=WTANGENT_TOKEN=<token>
+Environment=TANGENT_TOKEN=<token>
 ExecStart=$(which node) dist/bundle/cli.js --mode rpc
 Restart=on-failure
 RestartSec=5
@@ -79,11 +79,11 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 sudo systemctl daemon-reload
-sudo systemctl enable --now wtangent
-systemctl status wtangent
+sudo systemctl enable --now tangent
+systemctl status tangent
 ```
 
-服务器重启后自动拉起;日志:`journalctl -u wtangent -f`。
+服务器重启后自动拉起;日志:`journalctl -u tangent -f`。
 
 ## 6. 随时随地(内网穿透 + server code)
 
