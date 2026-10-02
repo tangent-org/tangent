@@ -110,7 +110,7 @@ async function serve(args) {
     process.exit(1);
   }
   log("启动 tangent server(headless pi + LAN 服务)…");
-  const quoted = `"${pi}" --mode rpc -e "${path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:")), "..")}"`;
+  const quoted = `"${pi}" --mode rpc -e "${path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:")), "..", "..")}"`;
   const child = spawn(quoted, { stdio: ["pipe", "inherit", "inherit"], shell: process.platform === "win32" });
   child.on("exit", code => process.exit(code ?? 0));
 }
@@ -184,6 +184,10 @@ if (sub === "serve" && args[0] !== "--help" && args[0] !== "-h") {
 } else if (args[0] === "--help" || args[0] === "-h") {
   // 子命令 --help:serve --help / attach --help / remote --help
   showHelp();
+} else if (sub === "--version" || sub === "-v" || sub === "-V") {
+  const pi = findPi();
+  const r = pi ? spawnSync(pi, ["--version"], { encoding: "utf8", shell: process.platform === "win32" }) : null;
+  console.log(r?.stdout?.trim() ?? "tangent (pi not found)");
 } else {
   // `tangent <名/URL>` 命中 remote 或 URL → 瘦客户端;否则提示
   if (resolveRemote(sub)) {
@@ -192,3 +196,4 @@ if (sub === "serve" && args[0] !== "--help" && args[0] !== "-h") {
     log(`未知命令 "${sub}"。运行 tangent --help 查看用法`);
   }
 }
+process.exit(0); // 显式退出(防意外常驻)
