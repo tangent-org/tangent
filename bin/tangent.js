@@ -21,10 +21,28 @@ function err(msg) {
   console.error(`[tangent] ${msg}`);
 }
 
+/** 运行时解析:1) 本包 bundle(tangent 本体,wrapper 所在位置两种布局都试)2) 上游 pi(兜底) */
 function findPi() {
+  const here = path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:"));
+  const candidates = [
+    path.resolve(here, "..", "dist", "bundle", "cli.js"),    // 源码布局:bin/ → dist/bundle/
+    path.resolve(here, "..", "bundle", "cli.js"),            // 包布局:dist/bin/ → dist/bundle/
+  ];
+  for (const c of candidates) {
+    if (existsSync(c)) return process.execPath;   // node + 本包 bundle
+  }
   for (const name of process.platform === "win32" ? ["pi.cmd", "pi.exe", "pi"] : ["pi"]) {
     const r = spawnSync(name, ["--version"], { encoding: "utf8", shell: process.platform === "win32" });
     if (r.status === 0) return name;
+  }
+  return null;
+}
+
+/** bundle 路径(与 findPi 的 own 候选一致;非 own 运行时返回 null) */
+function ownBundle() {
+  const here = path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:"));
+  for (const c of [path.resolve(here, "..", "dist", "bundle", "cli.js"), path.resolve(here, "..", "bundle", "cli.js")]) {
+    if (existsSync(c)) return c;
   }
   return null;
 }
@@ -93,7 +111,10 @@ remote 子命令:
 配置:
   服务器 ~/.tangent-server/config.json { port, host, token, basic, projectsDir, webDist }
   客户端 ~/.tangent/remotes.json [ { name, host, port, token, code } ]
-  数据目录 TANGENT_CODING_AGENT_DIR(缺省 ~/.tangent/agent;可与 pi 共用指向 ~/.pi/agent)`);
+  数据目录 TANGENT_CODING_AGENT_DIR(缺省 ~/.tangent/agent;可与 pi 共用指向 ~/.pi/agent)
+
+主程序完整选项(模型/会话/工具/环境变量等 187 行):tangent help --verbose
+  版本:                              tangent --version`);
 }
 
 // ================= serve:headless 起 pi + LAN 服务 =================
@@ -109,9 +130,14 @@ async function serve(args) {
     err("找不到 pi(先安装:@tangent-ai/tangent-coding-agent 或上游 pi)");
     process.exit(1);
   }
-  log("启动 tangent server(headless pi + LAN 服务)…");
-  const quoted = `"${pi}" --mode rpc -e "${path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:")), "..", "..")}"`;
-  const child = spawn(quoted, { stdio: ["pipe", "inherit", "inherit"], shell: process.platform === "win32" });
+  log("启动 tangent server(headless + LAN 服务)…");
+  const extDir = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w):/, "$1:")), "..");
+  const isOwn = pi === process.execPath;
+  const bundle = ownBundle() ?? path.join(extDir, "dist", "bundle", "cli.js");
+  const cmdline = isOwn
+    ? `"${pi}" ${JSON.stringify(bundle)} --mode rpc -e ${JSON.stringify(path.join(extDir, ".."))}`
+    : `"${pi}" --mode rpc -e ${JSON.stringify(extDir)}`;
+  const child = spawn(cmdline, { stdio: ["pipe", "inherit", "inherit"], shell: process.platform === "win32" });
   child.on("exit", code => process.exit(code ?? 0));
 }
 
@@ -179,15 +205,31 @@ if (sub === "serve" && args[0] !== "--help" && args[0] !== "-h") {
   }
 } else if (sub === "-R" || sub === "--remote") {
   void remoteChat(args[0]);
-} else if (sub === undefined || sub === "--help" || sub === "-h" || sub === "help") {
+} else if (sub === undefined || sub === "--help" || sub === "-h") {
+  showHelp();
+} else if (sub === "help" && (args[0] === "--verbose" || args[0] === "-v")) {
+  const pi = findPi();
+  if (!pi) { err("找不到主程序"); process.exit(1); }
+  const isOwn = pi === process.execPath;
+  const r = isOwn
+    ? spawnSync(pi, [ownBundle(), "--help"], { encoding: "utf8" })
+    : spawnSync(pi, ["--help"], { encoding: "utf8", shell: process.platform === "win32" });
+  console.log(r.stdout ?? "");
+} else if (sub === "help") {
   showHelp();
 } else if (args[0] === "--help" || args[0] === "-h") {
   // 子命令 --help:serve --help / attach --help / remote --help
   showHelp();
 } else if (sub === "--version" || sub === "-v" || sub === "-V") {
   const pi = findPi();
-  const r = pi ? spawnSync(pi, ["--version"], { encoding: "utf8", shell: process.platform === "win32" }) : null;
-  console.log(r?.stdout?.trim() ?? "tangent (pi not found)");
+  if (pi === process.execPath) {
+    const bundle = ownBundle();
+    const r = spawnSync(pi, [bundle, "--version"], { encoding: "utf8" });
+    console.log(r.stdout?.trim() ?? "");
+  } else {
+    const r = pi ? spawnSync(pi, ["--version"], { encoding: "utf8", shell: process.platform === "win32" }) : null;
+    console.log(r?.stdout?.trim() ?? "");
+  }
 } else {
   // `tangent <名/URL>` 命中 remote 或 URL → 瘦客户端;否则提示
   if (resolveRemote(sub)) {
