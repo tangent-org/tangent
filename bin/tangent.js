@@ -54,6 +54,48 @@ function resolveRemote(target) {
   return null;
 }
 
+// ================= --help =================
+function showHelp() {
+  console.log(`tangent — AI coding assistant + wtangent remote dev
+
+用法:
+  tangent [TUI]                      交互模式(默认;LAN 服务 :8890 常开)
+  tangent -p "..."                   单次问答后退出
+  tangent serve [选项]               headless 服务器模式(路由器/NAS 常驻)
+  tangent attach <目标> [选项]       瘦客户端:连接 remote 服务器流式聊天
+  tangent remote <子命令>            管理 remote 清单(~/.tangent/remotes.json)
+  tangent <TUI 选项>...              其余透传给主程序(见 tangent --help-verbose)
+
+serve 选项:
+  -R, --register       注册系统服务(Linux systemd / OpenWrt procd / Windows NSSM)*
+  -U, --unregister     注销系统服务 *
+  * 当前版本提示占位,服务化实现排期中
+
+attach 目标(<目标> = 名字 | 主机码 | http://URL>):
+  解析优先级:code → 名字 → URL 直填
+attach 选项:
+  -u, --username <名>  basic auth 用户名
+  -p, --password <密>  basic auth 密码
+  -c                   (保留)续上次会话
+
+remote 子命令:
+  add <名> <host[:port]> [token] [code]   添加(port 缺省 8890;code=主机码,隧道地址变 code 不变)
+  list                                    列出全部 remote
+  remove <名>                             移除
+
+示例:
+  tangent                                    # 本地 TUI,GLM 默认模型
+  tangent serve                              # NAS 上常驻(rpc + LAN :8890)
+  tangent remote add nas 192.168.1.5:8890 <token> room1
+  tangent attach room1                       # 任何设备经主机码直连
+  tangent attach http://192.168.1.5:8890     # URL 直连
+
+配置:
+  服务器 ~/.tangent-server/config.json { port, host, token, basic, projectsDir, webDist }
+  客户端 ~/.tangent/remotes.json [ { name, host, port, token, code } ]
+  数据目录 TANGENT_CODING_AGENT_DIR(缺省 ~/.tangent/agent;可与 pi 共用指向 ~/.pi/agent)`);
+}
+
 // ================= serve:headless 起 pi + LAN 服务 =================
 async function serve(args) {
   const register = args.some(a => a === "-R" || a === "--register");
@@ -117,25 +159,36 @@ function remoteManage(rest) {
 }
 
 // ================= 分发 =================
-if (sub === "serve") {
+if (sub === "serve" && args[0] !== "--help" && args[0] !== "-h") {
   void serve(args);
-} else if (sub === "remote") {
+} else if (sub === "serve") {
+  showHelp();
+} else if (sub === "remote" && args[0] !== "--help" && args[0] !== "-h") {
   remoteManage(args);
+} else if (sub === "remote") {
+  showHelp();
 } else if (sub === "attach") {
-  void remoteChat(args[0], {
-    pass: args.includes("-p") ? args[args.indexOf("-p") + 1] : args.includes("--password") ? args[args.indexOf("--password") + 1] : undefined,
-    user: args.includes("-u") || args.includes("--username") ? args[(args.indexOf("-u") >= 0 ? args.indexOf("-u") : args.indexOf("--username")) + 1] : undefined,
-    continueLast: args.includes("-c"),
-  });
+  if (!args[0] || args[0] === "--help" || args[0] === "-h") {
+    showHelp();
+  } else {
+    void remoteChat(args[0], {
+      pass: args.includes("-p") ? args[args.indexOf("-p") + 1] : args.includes("--password") ? args[args.indexOf("--password") + 1] : undefined,
+      user: args.includes("-u") || args.includes("--username") ? args[(args.indexOf("-u") >= 0 ? args.indexOf("-u") : args.indexOf("--username")) + 1] : undefined,
+      continueLast: args.includes("-c"),
+    });
+  }
 } else if (sub === "-R" || sub === "--remote") {
   void remoteChat(args[0]);
-} else if (sub === undefined) {
-  log("用法:tangent [TUI] | tangent serve [-R|-U] | tangent -R <名|code|URL> | tangent remote add|list|remove");
+} else if (sub === undefined || sub === "--help" || sub === "-h" || sub === "help") {
+  showHelp();
+} else if (args[0] === "--help" || args[0] === "-h") {
+  // 子命令 --help:serve --help / attach --help / remote --help
+  showHelp();
 } else {
   // `tangent <名/URL>` 命中 remote 或 URL → 瘦客户端;否则提示
   if (resolveRemote(sub)) {
     void remoteChat(sub);
   } else {
-    log(`未知命令 "${sub}"。用法:tangent [TUI] | tangent serve | tangent -R <remote> | tangent remote ...`);
+    log(`未知命令 "${sub}"。运行 tangent --help 查看用法`);
   }
 }
